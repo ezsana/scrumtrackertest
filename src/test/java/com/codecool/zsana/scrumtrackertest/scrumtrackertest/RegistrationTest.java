@@ -1,36 +1,47 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.NoAlertPresentException;
+
+import java.util.NoSuchElementException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RegistrationTest extends Basetest {
 
     private Homepage homepage;
     private Registration registration;
 
-    @BeforeEach
-    void setupTests() {
+    @BeforeAll
+    public void setupUpAllTest() {
         super.setUp();
         registration = new Registration(getDriver());
         homepage = new Homepage(getDriver());
-        registration.navigateToPage("http://192.168.1.105:3000/");
-        registration.clickOnElement(homepage.getRegistrationButton());
     }
 
-    @AfterEach
+    @BeforeEach
+    void setupTests() {
+        registration.navigateToPage(registration.getHomepage());
+        registration.clickOnElement(homepage.getSignInUpButton());
+        registration.clickOnElement(registration.getRegistrationButton());
+    }
+
+    @AfterAll
     void closeTests() {
         super.shutDown();
     }
 
     @Test
     @Order(1)
-    void registrationWorking() {
-        registration.writeIntoInputField(registration.getUsernameInputField(), getUsername());
-        registration.writeIntoInputField(registration.getPasswordInputField(), getPassword());
+    void registrationValid() {
+        registration.setRegistrationNameAndPassword();
+        registration.writeIntoInputField(registration.getUsernameInputField(), registration.getRegistrationName());
+        registration.writeIntoInputField(registration.getPasswordInputField(), registration.getRegistrationPassword());
         registration.clickOnElement(registration.getSubmitButton());
+        String message = registration.getPopUpMessage();
         registration.acceptPopUpAlert();
-        Assertions.assertTrue(homepage.isElementPresent(homepage.getHeading()));
+        Assertions.assertEquals("registration succes", message);
 
     }
 
@@ -38,17 +49,19 @@ class RegistrationTest extends Basetest {
     @Order(2)
     void registrationWithBlankFields() {
         registration.clickOnElement(registration.getSubmitButton());
+        String message = registration.getPopUpMessage();
         registration.acceptPopUpAlert();
-        Assertions.assertTrue(registration.isElementPresent(registration.getPasswordInputField()));
+        Assertions.assertEquals("Registration failed", message);
     }
 
     @Test
     @Order(3)
     void registrationWithExistingData() {
-        registration.writeIntoInputField(registration.getUsernameInputField(), getUsername());
-        registration.writeIntoInputField(registration.getPasswordInputField(), getPassword());
+        registration.writeIntoInputField(registration.getUsernameInputField(), registration.getRegistrationName());
+        registration.writeIntoInputField(registration.getPasswordInputField(), registration.getRegistrationPassword());
         registration.clickOnElement(registration.getSubmitButton());
+        String message = registration.getPopUpMessage();
         registration.acceptPopUpAlert();
-        Assertions.assertTrue(registration.isElementPresent(registration.getPasswordInputField()));
+        Assertions.assertEquals("Registration failed", message);
     }
 }

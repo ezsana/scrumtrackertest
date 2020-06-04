@@ -9,12 +9,14 @@ class HomepageTest extends Basetest{
 
     private Homepage homepage;
     private Registration registration;
+    private Projectspage projectspage;
 
     @BeforeEach
     void setupTests() {
         super.setUp();
         homepage = new Homepage(getDriver());
         registration = new Registration(getDriver());
+        projectspage = new Projectspage(getDriver());
         homepage.navigateToPage(homepage.getHomepage());
     }
 
@@ -34,10 +36,22 @@ class HomepageTest extends Basetest{
     }
 
     @Test
-    void clickOnButtonLeadsToPage() {
+    void clickOnSignInUpLeadsSignInUpPage() {
         homepage.clickOnElement(homepage.getSignInUpButton());
         Assertions.assertTrue(registration.isElementPresent(registration.getUsernameInputField()));
         Assertions.assertTrue(registration.isElementPresent(registration.getPasswordInputField()));
+    }
+
+    @Test
+    void clickOnHomeLeadsHomePage() {
+        homepage.clickOnElement(homepage.getHomeButton());
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getHeading()));
+    }
+
+    @Test
+    void clickOnProjectsLeadsProjectsPage() {
+        homepage.clickOnElement(homepage.getProjectsButton());
+        Assertions.assertTrue(projectspage.isElementPresent(projectspage.getCreateProjectInput()));
     }
 
 }

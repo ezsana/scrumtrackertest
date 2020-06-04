@@ -19,12 +19,13 @@ class LoginTest extends Basetest{
         login = new Login(getDriver());
         homepage = new Homepage(getDriver());
         projectspage = new Projectspage(getDriver());
-        homepage.navigateToPage("localhost:3000");
-        homepage.clickOnElement(homepage.getLoginButton());
+        homepage.navigateToPage(homepage.getHomepage());
+        homepage.clickOnElement(homepage.getSignInUpButton());
     }
 
     @AfterEach
     void closeTests() {
+        login.acceptPopUpAlert();
         super.shutDown();
     }
 
@@ -33,19 +34,22 @@ class LoginTest extends Basetest{
         login.writeIntoInputField(login.getUsernameInputField(), getUsername());
         login.writeIntoInputField(login.getPasswordInputField(), getPassword());
         login.clickOnElement(login.getSubmitButton());
-        Assertions.assertTrue(homepage.isElementPresent(homepage.getHeading()));
+        Assertions.assertEquals("Login successful", login.getPopUpMessage());
     }
 
     @Test
-    void invalidLogin() {
+    void invalidLoginWithInvalidCredentials() {
         login.writeIntoInputField(login.getUsernameInputField(), getInvalidUsername());
         login.writeIntoInputField(login.getPasswordInputField(), getInvalidPassword());
         login.clickOnElement(login.getSubmitButton());
-        try {
-            login.acceptPopUpAlert();
-            Assertions.assertTrue(true);
-        } catch (NullPointerException nullP) {
-            Assertions.fail();
-        }
+        Assertions.assertEquals("Login failed", login.getPopUpMessage());
+    }
+
+    @Test
+    void invalidLoginWithEmptyFields() {
+        login.writeIntoInputField(login.getUsernameInputField(), getInvalidUsername());
+        login.writeIntoInputField(login.getPasswordInputField(), getInvalidPassword());
+        login.clickOnElement(login.getSubmitButton());
+        Assertions.assertEquals("Login failed", login.getPopUpMessage());
     }
 }

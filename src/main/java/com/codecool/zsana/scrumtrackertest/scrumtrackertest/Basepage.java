@@ -1,6 +1,7 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.openqa.selenium.Alert;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -37,11 +38,49 @@ public class Basepage {
     }
 
     public void acceptPopUpAlert() {
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+        for (int i = 0; i < 100; i++) {
+            try {
+                Alert alert = driver.switchTo().alert();
+                alert.accept();
+                break;
+            } catch (NoAlertPresentException nap) {}
+        }
+    }
+
+    public void dismissPopUpAlert() {
+        for (int i = 0; i < 100; i++) {
+            try {
+                driver.switchTo().alert().dismiss();
+                break;
+            } catch (NoAlertPresentException nap) {}
+        }
+    }
+
+    public String getPopUpMessage() {
+        String message = null;
+        for (int i = 0; i < 100; i++) {
+            try {
+                message = driver.switchTo().alert().getText();
+            } catch (NoAlertPresentException nap) {}
+            if (message != null) {
+                break;
+            }
+        }
+        return message;
+    }
+
+    public void sendTextToPopUp(String text) {
+        for (int i = 0; i < 100; i++) {
+            try {
+                driver.switchTo().alert().sendKeys(text);
+                break;
+            } catch (NoAlertPresentException nap) {}
+        }
     }
 
     public String getHomepage() {
         return homepage;
     }
+
+
 }

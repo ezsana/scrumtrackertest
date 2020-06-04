@@ -6,7 +6,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class Projectspage extends Basepage {
 
-    @FindBy(xpath = "")
+    @FindBy(xpath = "//input[@class='sc-AxiKw hzGrch']")
     private WebElement createProjectInput;
 
     @FindBy(xpath = "")
