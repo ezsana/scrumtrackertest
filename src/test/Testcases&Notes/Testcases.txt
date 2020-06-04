@@ -1,0 +1,136 @@
+Homepage
+
+1)
+When I write (localhost:3000) scrumtracker homepage
+I see "Welcome to not Jira"
+And I see [Home, Projects, Registration, Login, Logout] elements
+
+2)
+Given that I'm on scrumtracker homepage
+When I click on Registration button
+I see registration fields to fill and a submit button
+
+3)
+Given that I'm on scrumtracker homepage
+When I click on Login button
+I see login fields to fill and a submit button
+
+4)
+Given that I'm on scrumtracker homepage
+When I click on Projects button
+I see "create a new project" fields to fill and "Create project" button
+
+
+Registration page
+
+5)
+Given I've clicked on Registration button
+And registration fields can be seen
+When I enter username and password and click on submit button
+Then pop-up window shows registration success.
+
+6)
+Given that I'm registered
+When I click on pop-up submit button
+Then I see "Welcome to Jira".
+
+7)
+Given I've clicked on Registration button
+And registration fields can be seen
+When I leave all fields blank and click on submit button
+Then pop-up shows that registration failed.
+
+8)
+Given I've clicked on Registration button
+And registration fields can be seen
+When I fill fields with already existing account data
+Then pop-up shows that registration failed.
+
+
+Login page
+
+9)
+Given that I'm on scrumtracker homepage
+And clicked on Login button
+When I enter valid username and valid password
+Then I see "Welcome to Jira"
+And I can create new project.
+
+10)
+Given that I'm on scrumtracker homepage
+And clicked on Login button
+When I enter invalid username and/or invalid password
+Then pop-up shows that login failed.
+
+11)
+Given that I have previous projects saved
+When I log in
+And I click on Projects button
+Then I can see a list of my projects.
+
+Logout
+
+12)
+Given that I'm logged in
+When I click on Logout button
+And click on my projects
+I'm not able to see my project details.
+
+Projects
+
+13)
+Given that I'm not logged in
+And I write in the "create new project" field and click on "create project" button
+I'm not able to create new project
+
+14)
+Given that I'm logged in and I'm on the Projects page
+When I click on the project name
+I can see my project details on a different page
+
+15)
+Given that I'm logged in and I'm on the Projects page
+When I fill in the "Create Project" field with less than three character
+Then a pop-up shows that I have to write more the three letters to create a project.
+
+Projects page
+
+16)
+Given that I'm on my unique project page
+When I fill in the "Add new status" field and click on submit (+) button
+I can see the new status on the page.
+
+17)
+Given that I'm on my unique project page
+When I fill in the "Add new task" field and click on submit (+) button
+I can see the new task in the first container on the page.
+
+18)
+Given that I'm on my unique project page
+When I fill in the "Add new status" field with less than three character and click on submit (+) button
+Then a pop-up shows that I have to write more the three letters to create a new status.
+
+19)
+Given that I'm on my unique project page
+When I fill in the "Add new task" field with less than three character and click on submit (+) button
+Then a pop-up shows that I have to write more the three letters to create a new task.
+
+20)
+Given that I'm on my unique project page
+When I drag one of the task from one status to an other
+Then the aforementioned task would be in the new container.
+
+21)
+Given that I'm on my unique project page
+When I click on delete button
+Then status is deleted.
+
+
+
+
+
+
+
+
+
+
