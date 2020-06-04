@@ -91,39 +91,48 @@ I can see my project details on a different page
 15)
 Given that I'm logged in and I'm on the Projects page
 When I fill in the "Create Project" field with less than three character
-Then a pop-up shows that I have to write more the three letters to create a project.
+Then a pop-up shows that I have to write at least three letters to create a project.
+
+16)
+Given that I'm logged in
+And I write in the "create new project" field and click on "create project" button
+I can see my new project
 
 Projects page
 
-16)
+17)
 Given that I'm on my unique project page
 When I fill in the "Add new status" field and click on submit (+) button
 I can see the new status on the page.
 
-17)
+18)
 Given that I'm on my unique project page
 When I fill in the "Add new task" field and click on submit (+) button
 I can see the new task in the first container on the page.
 
-18)
+19)
 Given that I'm on my unique project page
 When I fill in the "Add new status" field with less than three character and click on submit (+) button
 Then a pop-up shows that I have to write more the three letters to create a new status.
 
-19)
+20)
 Given that I'm on my unique project page
 When I fill in the "Add new task" field with less than three character and click on submit (+) button
 Then a pop-up shows that I have to write more the three letters to create a new task.
 
-20)
+21)
 Given that I'm on my unique project page
 When I drag one of the task from one status to an other
 Then the aforementioned task would be in the new container.
 
-21)
+22)
 Given that I'm on my unique project page
 When I click on delete button
 Then status is deleted.
+
+23)
+Note: it is possible to register with only one letter! The account name should be long enough and also
+the password.
 
 
 

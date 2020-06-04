@@ -33,9 +33,7 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "")
     private WebElement todoTaskDescription;
 
-    UniqueProjectpage(WebDriver driver) {
-        super(driver);
-    }
+
 
     public WebElement getTodoContainer() {
         return todoContainer;

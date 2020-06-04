@@ -1,12 +1,10 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoginTest extends Basetest{
 
     private Homepage homepage;
@@ -15,18 +13,17 @@ class LoginTest extends Basetest{
 
     @BeforeEach
     void setupTests() {
-        super.setUp();
-        login = new Login(getDriver());
-        homepage = new Homepage(getDriver());
-        projectspage = new Projectspage(getDriver());
+        Homepage.setUp();
+        login = new Login();
+        homepage = new Homepage();
+        projectspage = new Projectspage();
         homepage.navigateToPage(homepage.getHomepage());
         homepage.clickOnElement(homepage.getSignInUpButton());
     }
 
     @AfterEach
     void closeTests() {
-        login.acceptPopUpAlert();
-        super.shutDown();
+        Homepage.shutDown();
     }
 
     @Test
@@ -34,7 +31,9 @@ class LoginTest extends Basetest{
         login.writeIntoInputField(login.getUsernameInputField(), getUsername());
         login.writeIntoInputField(login.getPasswordInputField(), getPassword());
         login.clickOnElement(login.getSubmitButton());
-        Assertions.assertEquals("Login successful", login.getPopUpMessage());
+        boolean isHeadingOnPage = homepage.isElementPresent(homepage.getHeading());
+        homepage.clickOnElement(homepage.getLogoutButton());
+        Assertions.assertTrue(isHeadingOnPage);
     }
 
     @Test
@@ -42,7 +41,9 @@ class LoginTest extends Basetest{
         login.writeIntoInputField(login.getUsernameInputField(), getInvalidUsername());
         login.writeIntoInputField(login.getPasswordInputField(), getInvalidPassword());
         login.clickOnElement(login.getSubmitButton());
-        Assertions.assertEquals("Login failed", login.getPopUpMessage());
+        String message = login.getPopUpMessage();
+        login.acceptPopUpAlert();
+        Assertions.assertEquals("Login failed", message);
     }
 
     @Test
@@ -50,6 +51,9 @@ class LoginTest extends Basetest{
         login.writeIntoInputField(login.getUsernameInputField(), getInvalidUsername());
         login.writeIntoInputField(login.getPasswordInputField(), getInvalidPassword());
         login.clickOnElement(login.getSubmitButton());
-        Assertions.assertEquals("Login failed", login.getPopUpMessage());
+        String message = login.getPopUpMessage();
+        login.acceptPopUpAlert();
+        Assertions.assertEquals("Login failed", message);
     }
+
 }

@@ -1,15 +1,16 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class Homepage extends Basepage {
 
     @FindBy(xpath = "//a[.='Sign in / up']")
     private WebElement signInUpButton;
 
-    @FindBy(xpath = "//div[@class='text-link']")
+    @FindBy(xpath = "//a[.='Logout']")
     private WebElement logoutButton;
 
     @FindBy(xpath = "//*[@id=\"root\"]/div/div/h1")
@@ -21,34 +22,36 @@ public class Homepage extends Basepage {
     @FindBy(xpath = "//a[contains(.,'Home')]")
     private WebElement homeButton;
 
-    @FindBy(xpath = "//a[contains(.,'Projects')]")
+    @FindBy(xpath = "//*[@id=\"root\"]//a[@href=\"/projects\"]")
     private WebElement projectsButton;
 
-   Homepage(WebDriver driver) {
-       super(driver);
-   }
-
     public WebElement getSignInUpButton() {
-       return signInUpButton;
+        getWait().until(ExpectedConditions.visibilityOf(signInUpButton));
+        return signInUpButton;
     }
 
     public WebElement getLogoutButton() {
-       return getLogoutButton();
+        getWait().until(ExpectedConditions.visibilityOf(logoutButton));
+        return logoutButton;
     }
 
     public WebElement getProjectsButton() {
-       return projectsButton;
+        getWait().until(ExpectedConditions.visibilityOf(projectsButton));
+        return projectsButton;
     }
 
     public WebElement getHeading() {
+        getWait().until(ExpectedConditions.visibilityOf(heading));
         return heading;
     }
 
     public WebElement getNavbar() {
+        getWait().until(ExpectedConditions.visibilityOf(navbar));
         return navbar;
     }
 
     public WebElement getHomeButton() {
+        getWait().until(ExpectedConditions.visibilityOf(homeButton));
         return homeButton;
     }
 }

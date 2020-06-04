@@ -4,33 +4,48 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Basepage {
 
-    private WebDriver driver;
+    private static WebDriver driver;
+    private  static WebDriverWait wait;
     private String homepage = "http://192.168.1.105:3000";
 
-    Basepage(WebDriver driver) {
-        this.driver = driver;
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
+    Basepage() {
+        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
     }
 
-    public WebDriver getDriver() {
-        return this.driver;
+    public static void setUp() {
+        System.setProperty("webdriver.chrome.driver", "/home/zsana/chromedriver.exe");
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, 5);
+        driver.manage().window().maximize();
+    }
+
+    public static void shutDown() {
+        if (null != driver) {
+            driver.close();
+            driver.quit();
+        }
     }
 
     public boolean isElementPresent(WebElement element) {
+        wait.until(ExpectedConditions.visibilityOf(element));
         return element.isDisplayed();
     }
+
 
     public void writeIntoInputField(WebElement element, String input) {
         element.sendKeys(input);
     }
 
     public void clickOnElement(WebElement element) {
-        element.click();
+        wait.until(ExpectedConditions.visibilityOf(element)).click();
     }
 
     public void navigateToPage(String url) {
@@ -82,5 +97,11 @@ public class Basepage {
         return homepage;
     }
 
+    public static WebDriver getDriver() {
+        return driver;
+    }
 
+    public static WebDriverWait getWait() {
+        return wait;
+    }
 }

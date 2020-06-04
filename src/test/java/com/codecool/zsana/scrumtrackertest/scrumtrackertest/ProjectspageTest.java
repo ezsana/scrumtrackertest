@@ -1,17 +1,68 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebElement;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectspageTest {
 
+    private Homepage homepage;
+    private Login login;
+    private Projectspage projectspage;
+
     @BeforeEach
-    void setUp() {
+    void setupTests() {
+        Homepage.setUp();
+        login = new Login();
+        homepage = new Homepage();
+        projectspage = new Projectspage();
+        homepage.navigateToPage(homepage.getHomepage());
     }
 
     @AfterEach
-    void tearDown() {
+    void closeTests() {
+        Homepage.shutDown();
+    }
+
+    @Test
+    @Disabled
+    void withoutLogInCreatingProjectNotPossible() {
+        homepage.clickOnElement(homepage.getProjectsButton());
+        projectspage.writeIntoInputField(projectspage.getCreateProjectInput(), "New project");
+        projectspage.clickOnElement(projectspage.getSubmitButton());
+        // Here I would have to get a message that I have to log in to create projects.
+    }
+
+    @Test
+    void projectsAreOnPageWithLogin() {
+        login.validLogin(homepage);
+        homepage.clickOnElement(homepage.getProjectsButton());
+        boolean isProjectPresent = projectspage.isElementPresent(projectspage.getProject1());
+        login.logout(homepage);
+        Assertions.assertTrue(isProjectPresent);
+    }
+
+    @Test
+    void createProjectNotPossibleWithLessThanThreeChar() {
+        login.validLogin(homepage);
+        homepage.clickOnElement(homepage.getProjectsButton());
+        projectspage.createNewProject("ne");
+        String message = homepage.getPopUpMessage();
+        homepage.acceptPopUpAlert();
+        login.logout(homepage);
+        Assertions.assertEquals("minimum 3 character", message);
+    }
+
+    @Test
+    void newProjectIsDisplayedOnPage() {
+        login.validLogin(homepage);
+        homepage.clickOnElement(homepage.getProjectsButton());
+        //homepage.clickOnElement(homepage.getProjectsButton());
+        projectspage.createNewProject("New project 1234");
+        boolean newProjectDisplayed = projectspage.isNewProjectDisplayed("New project 1234");
+        projectspage.deleteProject("New project 1234");
+        login.logout(homepage);
+        Assertions.assertTrue(newProjectDisplayed);
     }
 }

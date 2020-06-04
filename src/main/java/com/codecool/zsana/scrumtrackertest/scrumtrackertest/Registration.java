@@ -1,6 +1,5 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -24,10 +23,6 @@ public class Registration extends Basepage {
     private String registrationName;
 
     private String registrationPassword;
-
-    Registration(WebDriver driver) {
-        super(driver);
-    }
 
     public void setRegistrationNameAndPassword() {
         String dateString = String.valueOf(now().getTime());

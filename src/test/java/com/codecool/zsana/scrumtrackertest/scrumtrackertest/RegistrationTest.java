@@ -14,14 +14,14 @@ class RegistrationTest extends Basetest {
     private Registration registration;
 
     @BeforeAll
-    public void setupUpAllTest() {
-        super.setUp();
-        registration = new Registration(getDriver());
-        homepage = new Homepage(getDriver());
+    void SetupAllTests() {
+        Homepage.setUp();
+        registration = new Registration();
+        homepage = new Homepage();
     }
 
     @BeforeEach
-    void setupTests() {
+    void setup() {
         registration.navigateToPage(registration.getHomepage());
         registration.clickOnElement(homepage.getSignInUpButton());
         registration.clickOnElement(registration.getRegistrationButton());
@@ -29,7 +29,8 @@ class RegistrationTest extends Basetest {
 
     @AfterAll
     void closeTests() {
-        super.shutDown();
+        homepage.clickOnElement(homepage.getLogoutButton());
+        Homepage.shutDown();
     }
 
     @Test
@@ -64,4 +65,9 @@ class RegistrationTest extends Basetest {
         registration.acceptPopUpAlert();
         Assertions.assertEquals("Registration failed", message);
     }
+
+    /*
+    @Test
+    void nameOrPasswordNotLongEnough() {}
+     */
 }
