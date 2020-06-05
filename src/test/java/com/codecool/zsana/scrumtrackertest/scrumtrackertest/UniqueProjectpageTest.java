@@ -7,11 +7,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UniqueProjectpageTest {
 
+    private Homepage homepage;
+    private Login login;
+    private Projectspage projectspage;
+
     @BeforeEach
-    void setUp() {
+    void setupTests() {
+        Homepage.setUp();
+        login = new Login();
+        homepage = new Homepage();
+        projectspage = new Projectspage();
+        homepage.navigateToPage(homepage.getHomepage());
     }
 
     @AfterEach
-    void tearDown() {
+    void closeTests() {
+        Homepage.shutDown();
     }
 }

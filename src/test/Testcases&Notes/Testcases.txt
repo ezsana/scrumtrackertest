@@ -73,8 +73,7 @@ Logout
 12)
 Given that I'm logged in
 When I click on Logout button
-And click on my projects
-I'm not able to see my project details.
+Then a pop-up window shows that logout was succesful.
 
 Projects
 
@@ -98,41 +97,76 @@ Given that I'm logged in
 And I write in the "create new project" field and click on "create project" button
 I can see my new project
 
-Projects page
+Unique projects page
 
 17)
+Given that I've just created a new project
+When I click on the newly created project
+Then the page of this project shows up
+And I can see three status: To Do; In Progress; Done
+
+18)
 Given that I'm on my unique project page
 When I fill in the "Add new status" field and click on submit (+) button
 I can see the new status on the page.
 
-18)
+19)
 Given that I'm on my unique project page
 When I fill in the "Add new task" field and click on submit (+) button
 I can see the new task in the first container on the page.
 
-19)
+20)
 Given that I'm on my unique project page
 When I fill in the "Add new status" field with less than three character and click on submit (+) button
 Then a pop-up shows that I have to write more the three letters to create a new status.
 
-20)
+21)
 Given that I'm on my unique project page
 When I fill in the "Add new task" field with less than three character and click on submit (+) button
 Then a pop-up shows that I have to write more the three letters to create a new task.
 
-21)
-Given that I'm on my unique project page
-When I drag one of the task from one status to an other
-Then the aforementioned task would be in the new container.
-
 22)
-Given that I'm on my unique project page
-When I click on delete button
-Then status is deleted.
+Given that I've created a new task
+When I click on the Edit task button
+Then I can see a pop-up window with possibilities to edit the task.
 
 23)
-Note: it is possible to register with only one letter! The account name should be long enough and also
-the password.
+Given that I clicked on the edit task button
+When I fill the inputs and click on the ok button
+Then I can change and save a new title, description and business value.
+
+24)
+Given that I clicked on the edit task button
+When I fill the inputs and click on the cancel button
+Then the changes are not saved.
+
+25)
+Given that I have a task
+When I drag the task from one status to an other
+Then the aforementioned task would be in the new container.
+
+26)
+Given that I have a task
+When I click on the task delete button
+Then the task is deleted.
+
+27)
+Given that I'm on my unique project page
+When I click on the status delete button
+Then status is deleted.
+
+28)
+Given that I'm on the unique project page
+And I click on the invite participant button
+Then I can see a pop-up window with possibilities to add new participants
+And see the already added ones.
+
+29)
+Given that I've clicked on the invite participant button
+When I fill in the input and click on the add participant button
+Then the invited participant's name in seen.
+
+
 
 
 
