@@ -1,14 +1,12 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class Basepage {
 
@@ -91,6 +89,18 @@ public class Basepage {
                 break;
             } catch (NoAlertPresentException nap) {}
         }
+    }
+
+    public WebElement searchElementByText(String elementText) {
+        return getWait().until(visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + elementText + "')]")));
+    }
+
+    public boolean elementIsNotPresent(WebElement element) {
+        return getWait().until(ExpectedConditions.invisibilityOf(element));
+    }
+
+    public void clearInputField(WebElement element) {
+        getWait().until(ExpectedConditions.visibilityOf(element)).clear();
     }
 
     public String getHomepage() {

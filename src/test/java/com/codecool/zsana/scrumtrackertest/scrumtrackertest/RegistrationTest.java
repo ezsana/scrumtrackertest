@@ -30,6 +30,7 @@ class RegistrationTest extends Basetest {
     @AfterAll
     void closeTests() {
         homepage.clickOnElement(homepage.getLogoutButton());
+        homepage.acceptPopUpAlert();
         Homepage.shutDown();
     }
 

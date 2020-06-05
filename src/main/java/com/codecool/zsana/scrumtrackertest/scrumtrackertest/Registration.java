@@ -3,8 +3,8 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static sun.security.krb5.internal.KerberosTime.now;
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Registration extends Basepage {
 
@@ -25,7 +25,9 @@ public class Registration extends Basepage {
     private String registrationPassword;
 
     public void setRegistrationNameAndPassword() {
-        String dateString = String.valueOf(now().getTime());
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH:mm:ss");
+        String dateString = dateTime.format(formatter);
         registrationName = "scrumtracker" + dateString;
         registrationPassword = registrationName;
     }

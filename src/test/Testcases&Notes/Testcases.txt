@@ -103,7 +103,7 @@ Unique projects page
 Given that I've just created a new project
 When I click on the newly created project
 Then the page of this project shows up
-And I can see three status: To Do; In Progress; Done
+And I can see three statuses: To Do; In Progress; Done
 
 18)
 Given that I'm on my unique project page
@@ -166,9 +166,12 @@ Given that I've clicked on the invite participant button
 When I fill in the input and click on the add participant button
 Then the invited participant's name in seen.
 
-
-
-
+Questions:
+Can we have more than one project with the same name?
+Can we have more than one status with the same name?
+Can we have more than one task with the same name?
+=> yes -> testcases for this
+=> no -> testcases for this
 
 
 

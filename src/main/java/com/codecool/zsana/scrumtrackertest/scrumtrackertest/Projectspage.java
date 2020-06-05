@@ -15,8 +15,11 @@ public class Projectspage extends Basepage {
     @FindBy(xpath = "//*[@id=\"root\"]//div[@class='project_page__create_project_container']//span")
     private WebElement submitButton;
 
-    @FindBy(xpath = "//div[@class='project_card']")
+    @FindBy(xpath = "//div[@class='project_card'][1]")
     private WebElement project1;
+
+    @FindBy(xpath = "//div[@class='project_card'][2]")
+    private WebElement proji;
 
     public WebElement getCreateProjectInput() {
         getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
@@ -33,11 +36,12 @@ public class Projectspage extends Basepage {
         return project1;
     }
 
-    public void createNewProject(String projectName) {
+    public WebElement createNewProject(String projectName) {
         getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
         writeIntoInputField(createProjectInput, projectName);
         getWait().until(ExpectedConditions.visibilityOf(submitButton));
         clickOnElement(submitButton);
+        return getWait().until(visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + projectName + "')]")));
     }
 
     public boolean isNewProjectDisplayed(String projectName) {
@@ -45,11 +49,15 @@ public class Projectspage extends Basepage {
     }
 
     public void deleteProject(String projectName) {
-        WebElement textDemo = getDriver().findElement(By.xpath("//*[contains(text(),'" + projectName + "')]"));
+        WebElement textDemo = searchElementByText(projectName);
         getWait().until(ExpectedConditions.visibilityOf(textDemo));
         WebElement grandParent = textDemo.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
         WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
         getWait().until(ExpectedConditions.visibilityOf(bin));
         bin.click();
+    }
+
+    public WebElement getProji() {
+        return proji;
     }
 }
