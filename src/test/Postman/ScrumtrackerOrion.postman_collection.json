@@ -1,0 +1,1912 @@
+{
+	"info": {
+		"_postman_id": "91ae4d29-3aec-4490-bb98-1a7f8ed20d48",
+		"name": "ScrumtrackerOrion",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "774cb286-1aad-4702-bab7-db99c45c268a",
+						"exec": [
+							"// No response body, so just checking the response code:",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1d436fe6-e0de-4800-aab6-3a2f00cbed01",
+						"exec": [
+							"// new user's name: scrumtracker + date;",
+							"let date = Date.now();",
+							"let user = \"scrumtracker\";",
+							"let username = user.concat(date.toString());",
+							"let pass = \"scrumtracker\";",
+							"let password = pass.concat(date.toString);",
+							"",
+							"pm.globals.set(\"username\", username);",
+							"pm.globals.set(\"password\", password);",
+							"",
+							"console.log(typeof username);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ce404231-1e0d-4556-a1e0-e691b7faafb1",
+						"exec": [
+							"// checking username, pwd, email:",
+							"",
+							"let response = pm.response.json();",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});",
+							"pm.test(\"Response contains username\", function () {",
+							"    pm.expect(response.username).to.eql(pm.globals.get(\"zsana6\"));",
+							"});",
+							"",
+							"pm.test(\"Response contains password\", function () {",
+							"    pm.expect(response.password).to.eql(pm.globals.get(\"zsana6pw\"));",
+							"});",
+							"",
+							"pm.test(\"Response contains email\", function () {",
+							"    pm.expect(response.email).to.eql(pm.globals.get(\"zsana6Email\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bbd72067-3732-4e44-8e6f-b493a67a8a2c",
+						"exec": [
+							"let zsana6 = \"zsana6\";",
+							"let zsana6pw = \"zsana6\";",
+							"let zsana6Email = \"zsana6@zsana6.com\";",
+							"",
+							"pm.globals.set(\"zsana6\", zsana6);",
+							"pm.globals.set(\"zsana6pw\", zsana6pw);",
+							"pm.globals.set(\"zsana6Email\", zsana6Email);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{zsana6}}\",\n\t\"password\": \"{{zsana6pw}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search for user",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ab2cbb0b-955a-4625-a46a-aad91c6b1648",
+						"exec": [
+							"let response = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"let result = 0;",
+							"for (let i = 0; i < response.length; i++) {",
+							"    if (response[i].username === pm.globals.get(\"zsana\") && response[i].email === pm.globals.get(\"zsanaEmail\")) {",
+							"        result++;",
+							"    } else if (response[i].username === pm.globals.get(\"zsana6\") && response[i].email === pm.globals.get(\"zsana6Email\")) {",
+							"        result++;",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"Search for user zsana\", function () {",
+							"    pm.expect(result).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "44a951f3-4337-4b97-894a-1526fe659648",
+						"exec": [
+							"let zsana = \"zsana\";",
+							"let zsanapw = \"zsana\";",
+							"let zsanaEmail = \"zsana@zsana.com\";",
+							"",
+							"pm.globals.set(\"zsana\", zsana);",
+							"pm.globals.set(\"zsanapw\", zsanapw);",
+							"pm.globals.set(\"zsanaEmail\", zsanaEmail);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{zsana}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/user/search",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"user",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "390acd62-80bc-4e50-b80b-eaebce646f0d",
+						"exec": [
+							"// checking project name(title) and response code:",
+							"",
+							"let jsonData = pm.response.json();",
+							"",
+							"let uuid = pm.response.json().id;",
+							"",
+							"// UUID is needed to delete this project in the next test - delete project:",
+							"pm.globals.set(\"uuidOfProjectForTest\", uuid);",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"pm.test(\"ProjectForTest equals\", function () {",
+							"    pm.expect(jsonData.title).to.eql(pm.globals.get(\"projectForTest\"));",
+							"});",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9a8b4bee-d7f3-444a-b885-84c97eb9ee7f",
+						"exec": [
+							"// project name: Project + date;",
+							"",
+							"let date = Date.now();",
+							"let projectForTest = \"Project\".concat(date.toString());",
+							"",
+							"pm.globals.set(\"projectForTest\", projectForTest);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectName\": \"{{projectForTest}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a2c95498-db87-4ed1-b9c0-56ae6f6afda6",
+						"exec": [
+							"// No response body, checking the response code;",
+							"// The uuid in the url is from the previous test - create project",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/delete/{{uuidOfProjectForTest}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"delete",
+						"{{uuidOfProjectForTest}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get my projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2e6c55d4-f9c2-4483-9322-3e90b50e75e4",
+						"exec": [
+							"// checking if the three permanent projects (BaseProjectForTest, ArchiveThisProject, ShareThisProject) are still available (jSonValue[0,1,2]):",
+							"",
+							"let jSonValue = pm.response.json();",
+							"",
+							"let result = 0;",
+							"for(let i = 0; i < jSonValue.length; i++) {",
+							"    if (jSonValue[i].title === \"BaseProjectForTest\") {",
+							"        result++;",
+							"        // get ID of BaseProject",
+							"        pm.globals.set(\"BaseProjectForTestID\",jSonValue[i].id);",
+							"        // get ID of table of BaseProject",
+							"        pm.globals.set(\"BaseProjectForTestTableID\", jSonValue[i].table.id);",
+							"    } else if (jSonValue[i].title === \"ArchiveThisProject\") {",
+							"        result++;",
+							"        // get ID of ArchiveThisProject",
+							"        pm.globals.set(\"archiveThisProjectID\", jSonValue[i].id);",
+							"    } else if (jSonValue[i].title === \"ShareThisProject\") {",
+							"        result++;",
+							"        // get Id of ShareThisProject",
+							"        pm.globals.set(\"shareThisProjectID\", jSonValue[i].id);",
+							"    }",
+							"}",
+							"pm.test(\"All projects in response\", function () {",
+							"    pm.expect(result).to.eql(3);",
+							"",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getmyprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getmyprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get project by id: 6a855e19-9aa8-4981-9568-4a997104fac4",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9113f40b-8efb-4f38-92b7-5e140446e5d0",
+						"exec": [
+							"// Checking the project title/name by project id (and response code):",
+							"",
+							"let projectByIdData = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Get project title by id\", function () {",
+							"    pm.expect(projectByIdData.title).to.eql(\"BaseProjectForTest\");",
+							"});",
+							"",
+							"// Status ids needed for tests - transfer task, add new task",
+							"let statuses = projectByIdData.table.statuses;",
+							"",
+							"let result = 0;",
+							"for (let i = 0; i < statuses.length; i++) {",
+							"    if (statuses[i].statusName === \"In Progress\") {",
+							"        result++;",
+							"        // in Progress status id:",
+							"        pm.globals.set(\"inProgressID\", statuses[i].id);",
+							"    } else if (statuses[i].statusName === \"Done\") {",
+							"        result++;",
+							"        // Done status id:",
+							"        pm.globals.set(\"doneID\", statuses[i].id);",
+							"    } else if (statuses[i].statusName === \"To Do\") {",
+							"        result++;",
+							"        // To Do status id:",
+							"        pm.globals.set(\"toDoID\", statuses[i].id);",
+							"        // Get the id of all tasks:",
+							"        let tasks = statuses[i].tasks;",
+							"        for (let y = 0; y < tasks.length; y++) {",
+							"            if (tasks[y].storyTitle === \"TransferThisTask\") {",
+							"                // get Id of task:",
+							"                pm.globals.set(\"transferThisTaskID\", tasks[y].id);",
+							"            } else if (tasks[y].storyTitle === \"SendThisTaskByEmail\") {",
+							"                pm.globals.set(\"sendThisTaskByEmailID\", tasks[y].id);",
+							"            } else if (tasks[y].storyTitle === \"ArchiveThisTask\") {",
+							"                pm.globals.set(\"archiveThisTaskID\", tasks[y].id);",
+							"            } else if (tasks[y].storyTitle === \"EditThisTask\") {",
+							"                pm.globals.set(\"editThisTaskID\", tasks[y].id);",
+							"            } else if (tasks[y].storyTitle === \"ShareThisTask\") {",
+							"                pm.globals.set(\"shareThisTaskID\", tasks[y].id);",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"All tasks available\", function () {",
+							"    pm.expect(result).to.eql(3);",
+							"})",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "233afd3f-1a44-4a49-9234-c008c07a900d",
+						"exec": [
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.105:8080/project/{{BaseProjectForTestID}}",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"105"
+					],
+					"port": "8080",
+					"path": [
+						"project",
+						"{{BaseProjectForTestID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New status: On Hold",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6ae70998-5bee-49ec-aa31-552bff1043b9",
+						"exec": [
+							"let newStatusData = pm.response.json().statuses;",
+							"",
+							"let result = 0;",
+							"let statusIdOfOnHold;",
+							"",
+							"// Get all statuses (array) of the project and loop through the array:",
+							"for (let i = 0; i < newStatusData.length; i++) {",
+							"    // if status name is On Hold, increment \"result\" by one:",
+							"  if (newStatusData[i].statusName === pm.globals.get(\"onHold\")) {",
+							"      statusIdOfOnHold = newStatusData[i].id;",
+							"      result++;",
+							"  }",
+							"}",
+							"",
+							"// This variable is needed for the next test - delete status:",
+							"pm.globals.set(\"statusIdOnHold\", statusIdOfOnHold);",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});",
+							"",
+							"// Checking if \"result\" is 1, which means statuses array has Hold On status:",
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.expect(result).to.eql(1);",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7bae91ee-3a6d-44d8-a656-7061c459c441",
+						"exec": [
+							"// The name of the new status - On Hold. The project id is from the previous test - get project by id:",
+							"let newStatusOnHold = \"On Hold\";",
+							"",
+							"pm.globals.set(\"onHold\", newStatusOnHold);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectId\": \"{{BaseProjectForTestID}}\",\n\t\"statusName\": \"{{onHold}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/newstatus",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"newstatus"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "00190da8-1bc9-4324-8220-f50724aa063f",
+						"exec": [
+							"// No response body, checking the response code",
+							"// statusIdOnHold & tableId in url are from previous test - New status: On Hold",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/deletestatus?statusid={{statusIdOnHold}}&tableid={{BaseProjectForTestTableID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"deletestatus"
+					],
+					"query": [
+						{
+							"key": "statusid",
+							"value": "{{statusIdOnHold}}"
+						},
+						{
+							"key": "tableid",
+							"value": "{{BaseProjectForTestTableID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b4940325-3427-4bfa-bd66-2241081eba5d",
+						"exec": [
+							"// No response body, checking the response code:",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cffeeec0-1ed4-46a6-8b46-54c1ef3526c3",
+						"exec": [
+							"// New task created which will be deleted in the next test - delete task after an additional step - get task id (which is needed to get this task's id):",
+							"let newTask = \" Zsana6 New task\";",
+							"",
+							"pm.globals.set(\"newTask\", newTask);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"statusId\": \"{{doneID}}\",\n\t\"title\": \"{{newTask}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/newtask",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"newtask"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get task id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e68eb30f-2739-465a-a311-9c61b1fe3f02",
+						"exec": [
+							"// This \"test\" is an additional step to get the task id which should be deleted in the next test. The task belongs to the To Do status:",
+							"",
+							"// Get ProjectZsana6 from the projects. This project is the first in the array",
+							"let jSonValue = pm.response.json()[0];",
+							"",
+							"// Get all statuses through the table:",
+							"let statuses = jSonValue.table.statuses;",
+							"",
+							"let doneTask;",
+							"",
+							"let i;",
+							"for (i = 0; i < statuses.length; i++) {",
+							"    // If statusname is To Do, get the whole object of the required task:",
+							"    if (statuses[i].statusName === \"Done\") {",
+							"        doneTask = statuses[i].tasks[0];",
+							"    }",
+							"}",
+							"",
+							"// Set global variable of the task id for the next test - delete task:",
+							"pm.globals.set(\"doneTaskId\", doneTask.id);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getmyprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getmyprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bde27dab-57b2-4635-acb7-45a8b5d93f0f",
+						"exec": [
+							"// doneTaskId is from previous additional step/test - get task id",
+							"// checking the response code:",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/task/delete/{{doneTaskId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"delete",
+						"{{doneTaskId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get table by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "844c2d25-638d-4f74-99e1-e8249d2fb441",
+						"exec": [
+							"// Checking if table is still available, table id is valid:",
+							"",
+							"// Get the table object back from response:",
+							"let table = pm.response.json();",
+							"",
+							"// Get the id of the table:",
+							"let tableId = table.id;",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Table id equals\", function () {",
+							"    pm.expect(pm.globals.get(\"BaseProjectForTestTableID\")).to.eql(tableId);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "646d8c7b-f807-449b-93fb-b20b63b6574a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/gettable/{{BaseProjectForTestTableID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"gettable",
+						"{{BaseProjectForTestTableID}}"
+					],
+					"query": [
+						{
+							"key": "tableId",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "dbd2b8ac-76fa-4188-ae5c-ba664e182abe",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f494e41c-b51f-4be5-9533-360b09c1e5f2",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fromStatusId\": \"{{toDoID}}\",\n\t\"toStatusId\": \"{{inProgressID}}\",\n\t\"taskId\": \"{{transferThisTaskID}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/task/transfer",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer task is working",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8cbae82f-93db-4668-ad0d-75eaed75bd8d",
+						"exec": [
+							"let statuses = pm.response.json().table.statuses;",
+							"",
+							"let transferredTask;",
+							"let result = 0;",
+							"// iterate through statuses",
+							"for (let i = 0; i < statuses.length; i++) {",
+							"    if (statuses[i].statusName === \"In Progress\") {",
+							"        let tasks = statuses[i].tasks;",
+							"        let y;",
+							"        // iterate through tasks in Done status",
+							"        for (y = 0; y < tasks.length; y++) {",
+							"            if (tasks[y].storyTitle === \"TransferThisTask\") {",
+							"                result++;",
+							"            }",
+							"        }",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"Task is transferred\", function () {",
+							"    pm.expect(result).to.eql(1);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "2e751b31-90c9-4d84-94a5-99b8cc501b69",
+						"exec": [
+							"console.log(pm.globals.get(\"transferThisTaskID\"));"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/{{BaseProjectForTestID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"{{BaseProjectForTestID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Transfer task back",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e752a127-00dd-4bfb-899d-c890f560fdb6",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fromStatusId\": \"{{inProgressID}}\",\n\t\"toStatusId\": \"{{toDoID}}\",\n\t\"taskId\": \"{{transferThisTaskID}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/task/transfer",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"transfer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "e324e5ea-8fe4-48c0-9738-562857256fec",
+						"exec": [
+							"// Checking new title, new description and new business value",
+							"",
+							"let task = pm.response.json();",
+							"",
+							"pm.test(\"Title matches\", function () {",
+							"    pm.expect(task.storyTitle).to.eql(\"This is a new title\");",
+							"});",
+							"",
+							"pm.test(\"Description matches\", function () {",
+							"    pm.expect(task.userStory).to.eql(\"This is a new description\");",
+							"});",
+							"",
+							"pm.test(\"Business value is 2\", function () {",
+							"    pm.expect(task.businessValue).to.eql(2);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3561e711-65f7-41fe-81e6-1b83802f5418",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"storyTitle\": \"This is a new title\",\n\t\"userStory\": \"This is a new description\",\n\t\"businessValue\": 2\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/task/edit/{{editThisTaskID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"edit",
+						"{{editThisTaskID}}"
+					],
+					"query": [
+						{
+							"key": "taskId",
+							"value": "94011503-7c22-4e7f-8480-ffe434c4b1ca",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Clear edited task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6ee5bcab-9842-4f0f-a120-9e7140dfa4f5",
+						"exec": [
+							"// Additional step to reverse to the original environment state:",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"EditThisTask\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"storyTitle\": \"EditThisTask\",\n\t\"userStory\": \"\",\n\t\"businessValue\": 0\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/task/edit/{{editThisTaskID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"edit",
+						"{{editThisTaskID}}"
+					],
+					"query": [
+						{
+							"key": "taskId",
+							"value": "94011503-7c22-4e7f-8480-ffe434c4b1ca",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archive task ???",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "39918048-ed4e-4f47-8080-deca565e9ef9",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d47d32c6-5a97-44c9-b235-9ddce82c4c4a",
+						"exec": [
+							"// No response body, checking status code 200:",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/task/archive/{{archiveThisTaskID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"archive",
+						"{{archiveThisTaskID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Archive project",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "6dfe43bf-3099-48f3-8cb8-26a8a0e37bb5",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e44bd7fc-6125-4bfa-bde7-a1f106e6f31b",
+						"exec": [
+							"// No response body, checking response code:",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/archive/{{archiveThisProjectID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"archive",
+						"{{archiveThisProjectID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get active and archived projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "a9439b0f-c22a-4454-85fb-44532b66d1d4",
+						"exec": [
+							"// checking if the two active projects (BaseProjectForTest; ShareThisProject) and one archived project (ArchiveThisProject) are seen (jSonValue[0,1,2]):",
+							"",
+							"let jSonValue = pm.response.json();",
+							"",
+							"let result = 0;",
+							"for(let i = 0; i < jSonValue.length; i++) {",
+							"    if (jSonValue[i].title === \"BaseProjectForTest\") {",
+							"        result++;",
+							"    } else if (jSonValue[i].title === \"ShareThisProject\") {",
+							"        result++;",
+							"    } else if (jSonValue[i].title === \"ArchiveThisProject\") {",
+							"        result++;",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"All projects in response\", function () {",
+							"    pm.expect(result).to.eql(3);",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getmyprojectswitharchive",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getmyprojectswitharchive"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get only active projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5f729519-56e3-4f06-81dd-46e735e6b346",
+						"exec": [
+							"// checking if the two active projects (BaseProjectForTest; ShareThisProject) is in the response and the archived project (ArchiveThisProject) is not:",
+							"",
+							"let jSonValue = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Only active projects:",
+							"let result = 0;",
+							"for(let i = 0; i < jSonValue.length; i++) {",
+							"    if (jSonValue[i].title === \"BaseProjectForTest\") {",
+							"        result++;",
+							"    } else if (jSonValue[i].title === \"ShareThisProject\") {",
+							"        result++;",
+							"    }",
+							"}",
+							"",
+							"pm.test(\"All projects in response\", function () {",
+							"    pm.expect(result).to.eql(2);",
+							"})",
+							"",
+							"// This project is archived and is not in the json object:",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.not.include(\"ArchiveThisProject\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getactiveprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getactiveprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get archive projects only",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f94b434b-6ea9-4544-a97a-0d5dbe7b6c50",
+						"exec": [
+							"// checking if the one archive project (ArchiveThisProject) is seen, but active projects not (BaseProjectForTest, ShareThisProject):",
+							"",
+							"let jSonValue = pm.response.json();",
+							"",
+							"// The archive project is in the json:",
+							"pm.test(\"Get archived project\", function () {",
+							"    pm.expect(jSonValue[0].title).to.eql( \"ArchiveThisProject\");",
+							"});",
+							"",
+							"// The title of the active projects are not present in the json:",
+							"pm.test(\"Active projects are not in response\", function () {",
+							"    pm.expect(pm.response.text()).to.not.include(\"BaseProjectForTest\");",
+							"    pm.expect(pm.response.text()).to.not.include(\"ShareThisProject\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getarchiveprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getarchiveprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate archived project for future testing",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "4057b8d5-32fe-4a30-969e-bb359d8ee7c5",
+						"exec": [
+							"// Additional step to activate the archive project for future testing:",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/archive/{{archiveThisProjectID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"archive",
+						"{{archiveThisProjectID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create shared project",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "d29f43f4-2a97-4257-857b-c3b120ac570a",
+						"exec": [
+							"// New project to share with user zsana:",
+							"let shareThisProjectTemp = \"shareThisProjectTemp\";",
+							"",
+							"pm.globals.set(\"shareThisProjectTemp\", shareThisProjectTemp);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "355bb19d-5c88-46c0-954c-fbf9d73dab69",
+						"exec": [
+							"// Just check if everything is ok - status code 200 and get project id for further testing:",
+							"",
+							"let projectId = pm.response.json().id;",
+							"",
+							"pm.globals.set(\"sharedProjectTempId\", projectId);",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"projectName\": \"{{shareThisProjectTemp}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/create",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add user to shared project",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c6baa938-7d74-49cd-865e-6fcf0ca02820",
+						"exec": [
+							"// Add user zsana to this project, check response username is zsana",
+							"",
+							"// Getting back an array with one element:",
+							"let jsonData = pm.response.json()[0];",
+							"",
+							"pm.test(\"User is added to project\", function () {",
+							"    // User is zsana:",
+							"    pm.expect(jsonData.username).to.eql(\"zsana\");",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"zsana\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/adduser/{{sharedProjectTempId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"adduser",
+						"{{sharedProjectTempId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9aa8a4e0-f053-49eb-8f8f-921958910af4",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in as zsana for shared project tests",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0889833a-12bb-4bbe-a679-a25cd8e6f8ba",
+						"exec": [
+							"// Logging in as zsana to check the shared project in the next test",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{zsana}}\",\n\t\"password\": \"{{zsanapw}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Project amongst all projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0abde8f3-1161-4c46-8b1a-de2963b6b496",
+						"exec": [
+							"// Sign in as zsana - check if this user has access to the shared project",
+							"",
+							"let projectByIdData = pm.response.json();",
+							"",
+							"pm.test(\"Check project at user zsana account\", function () {",
+							"    pm.expect(projectByIdData.title).to.eql(\"shareThisProjectTemp\");",
+							"    pm.expect(projectByIdData.participants[0].username).to.eql(\"zsana\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/{{sharedProjectTempId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"{{sharedProjectTempId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get participate projects",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f20f2c75-f208-40fa-956e-c280bbfcd1fb",
+						"exec": [
+							"// Sign in as zsana - check if this user has access to the shared project",
+							"",
+							"// array of object in response body",
+							"let projectByIdData = pm.response.json()[0];",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check project at user zsana account\", function () {",
+							"    pm.expect(projectByIdData.title).to.eql(\"shareThisProjectTemp\");",
+							"    pm.expect(projectByIdData.participants[0].username).to.eql(\"zsana\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getparticipateprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getparticipateprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete shared project as user zsana",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73e8ff46-d70a-43ae-8ebe-0a74b4c3ac3f",
+						"exec": [
+							"//Check status code is 200 after deleting project",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/delete/{{sharedProjectTempId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"delete",
+						"{{sharedProjectTempId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout as zsana",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign in as zsana6",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bd732f9f-2336-4f89-ab60-6827b07ff605",
+						"exec": [
+							"// This is an additional step to check whether the shared project was indeed deleted from the account of user zsana",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{zsana6}}\",\n\t\"password\": \"{{zsana6pw}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/signin",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Shared project is deleted",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ce129061-2e2a-486e-b041-5a64a1ed5c51",
+						"exec": [
+							"// checking if shared project was deleted:",
+							"",
+							"let jSonValue = pm.response.json();",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Shared project is deleted\", function () {",
+							"    pm.expect(pm.response.text()).to.not.include(\"shareThisProjectTemp\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/getmyprojects",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"getmyprojects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send email to zsana (shareThisProject)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d653fd26-da0b-41ae-8203-e5c2784cfde6",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{zsanaEmail}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/email/{{shareThisProjectID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"email",
+						"{{shareThisProjectID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout as zsana6",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5fe1c2fe-9633-44d9-9d60-10395924136f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/auth/logout",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
