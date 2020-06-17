@@ -1,9 +1,6 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.WebElement;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ProjectspageTest {
 

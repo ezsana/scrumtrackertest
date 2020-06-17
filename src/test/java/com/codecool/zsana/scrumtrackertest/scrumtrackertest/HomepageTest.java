@@ -2,8 +2,6 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HomepageTest extends Basetest{
 
@@ -54,7 +52,6 @@ class HomepageTest extends Basetest{
         homepage.clickOnElement(homepage.getProjectsButton());
         Assertions.assertTrue(projectspage.isElementPresent(projectspage.getCreateProjectInput()));
     }
-
 
 
 }

@@ -2,21 +2,17 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class LoginTest extends Basetest{
 
     private Homepage homepage;
     private Login login;
-    private Projectspage projectspage;
 
     @BeforeEach
     void setupTests() {
         Homepage.setUp();
         login = new Login();
         homepage = new Homepage();
-        projectspage = new Projectspage();
         homepage.navigateToPage(homepage.getHomepage());
         homepage.clickOnElement(homepage.getSignInUpButton());
     }
