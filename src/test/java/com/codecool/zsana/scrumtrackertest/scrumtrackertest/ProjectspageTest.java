@@ -5,13 +5,13 @@ import org.junit.jupiter.api.*;
 class ProjectspageTest {
 
     private Homepage homepage;
-    private Login login;
+    private SignIn signIn;
     private Projectspage projectspage;
 
     @BeforeEach
     void setupTests() {
         Homepage.setUp();
-        login = new Login();
+        signIn = new SignIn();
         homepage = new Homepage();
         projectspage = new Projectspage();
         homepage.navigateToPage(homepage.getHomepage());
@@ -33,33 +33,33 @@ class ProjectspageTest {
 
     @Test
     void projectsAreOnPageWithLogin() {
-        login.validLogin(homepage);
+        signIn.validLogin(homepage);
         homepage.clickOnElement(homepage.getProjectsButton());
         boolean isProjectPresent = projectspage.isElementPresent(projectspage.getProject1());
-        login.logout(homepage);
+        signIn.logout(homepage);
         Assertions.assertTrue(isProjectPresent);
     }
 
     @Test
     void createProjectNotPossibleWithLessThanThreeChar() {
-        login.validLogin(homepage);
+        signIn.validLogin(homepage);
         homepage.clickOnElement(homepage.getProjectsButton());
         projectspage.createNewProject("ne");
         String message = homepage.getPopUpMessage();
         homepage.acceptPopUpAlert();
-        login.logout(homepage);
+        signIn.logout(homepage);
         Assertions.assertEquals("minimum 3 character", message);
     }
 
     @Test
     void newProjectIsDisplayedOnPage() {
-        login.validLogin(homepage);
+        signIn.validLogin(homepage);
         homepage.clickOnElement(homepage.getProjectsButton());
         //homepage.clickOnElement(homepage.getProjectsButton());
         projectspage.createNewProject("New project 1234");
         boolean newProjectDisplayed = projectspage.isNewProjectDisplayed("New project 1234");
         projectspage.deleteProject("New project 1234");
-        login.logout(homepage);
+        signIn.logout(homepage);
         Assertions.assertTrue(newProjectDisplayed);
     }
 }

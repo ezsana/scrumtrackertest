@@ -15,19 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class UniqueProjectpageTest extends Basetest {
 
     private Homepage homepage;
-    private Login login;
+    private SignIn signIn;
     private Projectspage projectspage;
     private UniqueProjectpage uniqueProjectpage;
 
     @BeforeAll
     void setup() {
         Homepage.setUp();
-        login = new Login();
+        signIn = new SignIn();
         homepage = new Homepage();
         projectspage = new Projectspage();
         uniqueProjectpage = new UniqueProjectpage();
         homepage.navigateToPage(homepage.getHomepage());
-        login.validLogin(homepage);
+        signIn.validLogin(homepage);
         homepage.clickOnElement(homepage.getProjectsButton());
     }
 

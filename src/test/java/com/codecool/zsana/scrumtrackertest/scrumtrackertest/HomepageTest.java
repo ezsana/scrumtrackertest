@@ -6,14 +6,14 @@ import org.junit.jupiter.api.*;
 class HomepageTest extends Basetest{
 
     private Homepage homepage;
-    private Registration registration;
+    private SignUp signUp;
     private Projectspage projectspage;
 
     @BeforeEach
     void setupTests() {
         Homepage.setUp();
         homepage = new Homepage();
-        registration = new Registration();
+        signUp = new SignUp();
         projectspage = new Projectspage();
         homepage.navigateToPage(homepage.getHomepage());
     }
@@ -36,9 +36,9 @@ class HomepageTest extends Basetest{
     @Test
     void clickOnSignInUpLeadsSignInUpPage() {
         homepage.clickOnElement(homepage.getSignInUpButton());
-        registration.clickOnElement(registration.getRegistrationButton());
-        Assertions.assertTrue(registration.isElementPresent(registration.getUsernameInputField()));
-        Assertions.assertTrue(registration.isElementPresent(registration.getPasswordInputField()));
+        signUp.clickOnElement(signUp.getRegistrationButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getUsernameInputField()));
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getPasswordInputField()));
     }
 
     @Test
