@@ -9,38 +9,47 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 
 public class Projectspage extends Basepage {
 
-    @FindBy(xpath = "//input[@class='sc-AxiKw hzGrch']")
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_text']")
+    private WebElement yourProjectsHeading;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'BaseProjectForTest')]")
+    private WebElement baseProjectForTestTitle;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'ShareThisProject')]")
+    private WebElement shareThisProjectTitle;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'ArchiveThisProject')]")
+    private WebElement archiveThisProjectTitle;
+
+    // Archive project sign before AND after archiving:
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card'][3]//span[@aria-label='api']")
+    private WebElement getShareThisProjectSign;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_page__create_project_container']//input[@placeholder='Project Name']")
     private WebElement createProjectInput;
 
-    @FindBy(xpath = "//*[@id=\"root\"]//div[@class='project_page__create_project_container']//span")
-    private WebElement submitButton;
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_page__create_project_container']//span[@aria-label='plus-circle']")
+    private WebElement createProjectSubmitButton;
 
-    @FindBy(xpath = "//div[@class='project_card'][1]")
-    private WebElement project1;
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_text archive']")
+    private WebElement showAndHideArchiveProjects;
 
-    @FindBy(xpath = "//div[@class='project_card'][2]")
-    private WebElement proji;
 
     public WebElement getCreateProjectInput() {
         getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
         return createProjectInput;
     }
 
-    public WebElement getSubmitButton() {
-        getWait().until(ExpectedConditions.visibilityOf(submitButton));
-        return submitButton;
-    }
-
-    public WebElement getProject1() {
-        getWait().until(ExpectedConditions.visibilityOf(project1));
-        return project1;
+    public WebElement getCreateProjectSubmitButton() {
+        getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
+        return createProjectSubmitButton;
     }
 
     public WebElement createNewProject(String projectName) {
         getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
         writeIntoInputField(createProjectInput, projectName);
-        getWait().until(ExpectedConditions.visibilityOf(submitButton));
-        clickOnElement(submitButton);
+        getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
+        clickOnElement(createProjectInput);
         return getWait().until(visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + projectName + "')]")));
     }
 
@@ -49,15 +58,35 @@ public class Projectspage extends Basepage {
     }
 
     public void deleteProject(String projectName) {
-        WebElement textDemo = searchElementByText(projectName);
-        getWait().until(ExpectedConditions.visibilityOf(textDemo));
-        WebElement grandParent = textDemo.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
-        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
+        WebElement projectCardTitle = searchElementByText(projectName);
+        getWait().until(ExpectedConditions.visibilityOf(projectCardTitle));
+        WebElement parent = projectCardTitle.findElement(By.xpath("./.."));
+        WebElement bin = parent.findElement(By.className("project_tool_container")).findElement(By.xpath("./span[@aria-label='delete']"));
         getWait().until(ExpectedConditions.visibilityOf(bin));
         bin.click();
     }
 
-    public WebElement getProji() {
-        return proji;
+    public WebElement getYourProjectsHeading() {
+        return yourProjectsHeading;
+    }
+
+    public WebElement getBaseProjectForTestTitle() {
+        return baseProjectForTestTitle;
+    }
+
+    public WebElement getShareThisProjectTitle() {
+        return shareThisProjectTitle;
+    }
+
+    public WebElement getArchiveThisProjectTitle() {
+        return archiveThisProjectTitle;
+    }
+
+    public WebElement getGetShareThisProjectSign() {
+        return getShareThisProjectSign;
+    }
+
+    public WebElement getShowAndHideArchiveProjects() {
+        return showAndHideArchiveProjects;
     }
 }
