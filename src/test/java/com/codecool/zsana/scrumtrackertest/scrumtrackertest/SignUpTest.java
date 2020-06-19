@@ -1,69 +1,112 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SignUpTest extends Basetest {
 
-    private Homepage homepage;
     private SignUp signUp;
 
     @BeforeAll
     void SetupAllTests() {
-        Homepage.setUp();
+        Basepage.setUp();
         signUp = new SignUp();
-        homepage = new Homepage();
     }
 
     @BeforeEach
     void setup() {
-        signUp.navigateToPage(signUp.getHomepage());
-        signUp.clickOnElement(homepage.getSignInUpButton());
-        signUp.clickOnElement(signUp.getRegistrationButton());
+        Basepage.goToAppUrl();
+        signUp.clickOnElement(signUp.getSignUpButton());
     }
 
     @AfterAll
     void closeTests() {
-        homepage.clickOnElement(homepage.getLogoutButton());
-        homepage.acceptPopUpAlert();
-        Homepage.shutDown();
+        signUp.clickOnElement(signUp.getCloseWindowButton());
+        Basepage.shutDown();
     }
 
-    @Test
-    @Order(1)
-    void registrationValid() {
-        signUp.setRegistrationNameAndPassword();
-        signUp.writeIntoInputField(signUp.getUsernameInputField(), signUp.getRegistrationName());
-        signUp.writeIntoInputField(signUp.getPasswordInputField(), signUp.getRegistrationPassword());
-        signUp.clickOnElement(signUp.getSubmitButton());
-        String message = signUp.getPopUpMessage();
-        signUp.acceptPopUpAlert();
-        Assertions.assertEquals("signUp succes", message);
-
-    }
-
-    @Test
-    @Order(2)
-    void registrationWithBlankFields() {
-        signUp.clickOnElement(signUp.getSubmitButton());
-        String message = signUp.getPopUpMessage();
-        signUp.acceptPopUpAlert();
-        Assertions.assertEquals("SignUp failed", message);
-    }
-
-    @Test
-    @Order(3)
-    void registrationWithExistingData() {
-        signUp.writeIntoInputField(signUp.getUsernameInputField(), signUp.getRegistrationName());
-        signUp.writeIntoInputField(signUp.getPasswordInputField(), signUp.getRegistrationPassword());
-        signUp.clickOnElement(signUp.getSubmitButton());
-        String message = signUp.getPopUpMessage();
-        signUp.acceptPopUpAlert();
-        Assertions.assertEquals("SignUp failed", message);
-    }
-
-    /*
-    @Test
-    void nameOrPasswordNotLongEnough() {}
+    /**
+     * Valid registration
      */
+
+    @Test
+    void registrationValid() {
+        signUp.setRegistrationNamePasswordAndEmail();
+        signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), signUp.getSignUpName());
+        signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), signUp.getSignUpPassword());
+        signUp.writeIntoInputField(signUp.getSignUpEmailField(), signUp.getSignUpEmail());
+        signUp.clickOnElement(signUp.getSignUpSubmitButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getSuccessfulRegistrationWindowMessage()));
+    }
+
+    /**
+     * Invalid registration:
+     * too short username
+     * too short password
+     * blank password
+     * blank username
+     * all-spaces username
+     * all fields blank
+     */
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/registration.csv", numLinesToSkip = 5)
+    void invalidRegistration(String username, String password, String email) {
+        if (username == null) username = "";
+        if (password == null) password = "";
+        signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), username);
+        signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), password);
+        signUp.writeIntoInputField(signUp.getSignUpEmailField(), email);
+        signUp.clickOnElement(signUp.getSignUpSubmitButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getAtLeastFiveCharMessage()));
+    }
+
+    /**
+     * Too short e-mail
+     * Invalid e-mail
+     */
+
+    @ParameterizedTest
+    @ValueSource(strings = {"e", "emailaddress.com", "emailaddress@emailaddress", "emailaddress@emailaddress.", "@emailaddress.com", "     @     .com", "      .      .   "})
+    void wrongEmailInput(String email) {
+        String username = "username";
+        String password = "password";
+        signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), username);
+        signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), password);
+        signUp.writeIntoInputField(signUp.getSignUpEmailField(), email);
+        signUp.clickOnElement(signUp.getSignUpSubmitButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getInvalidEmailMessage()));
+    }
+
+    /**
+     * Blank e-mail
+     */
+
+    @Test
+    void invalidBlankEmail() {
+        String username = "username";
+        String password = "password";
+        String email = "";
+        signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), username);
+        signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), password);
+        signUp.writeIntoInputField(signUp.getSignUpEmailField(), email);
+        signUp.clickOnElement(signUp.getSignUpSubmitButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getBlankEmailMessage()));
+    }
+
+    /**
+     * Registration with existing data
+     */
+
+    @Test
+    void registrationWithExistingData() {
+        signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), getUsername2());
+        signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), getPassword2());
+        signUp.writeIntoInputField(signUp.getSignUpEmailField(), getEmail2());
+        signUp.clickOnElement(signUp.getSignUpSubmitButton());
+        Assertions.assertTrue(signUp.isElementPresent(signUp.getUserAlreadyExistsMessage()));
+    }
 }

@@ -5,6 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SignIn extends Basepage {
+    /*
 
     @FindBy(xpath = "//*[@id='root']//div[@class='authpage_select_btn_container']/div[contains(text(),'Sign in')]")
     private WebElement signInButton;
@@ -54,4 +55,6 @@ public class SignIn extends Basepage {
         getWait().until(ExpectedConditions.visibilityOf(signInButton));
         return signInButton;
     }
+
+     */
 }

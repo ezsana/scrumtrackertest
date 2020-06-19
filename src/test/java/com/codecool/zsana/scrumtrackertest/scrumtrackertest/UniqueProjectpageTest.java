@@ -56,6 +56,7 @@ class UniqueProjectpageTest extends Basetest {
                 DynamicTest.dynamicTest("Done", () -> assertTrue(uniqueProjectpage.isElementPresent(uniqueProjectpage.getDoneContainer()))));
     }
 
+
     /*
         18)
         Given that I'm on my unique project page

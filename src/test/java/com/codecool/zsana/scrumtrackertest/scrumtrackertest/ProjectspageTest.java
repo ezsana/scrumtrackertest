@@ -62,4 +62,5 @@ class ProjectspageTest {
         signIn.logout(homepage);
         Assertions.assertTrue(newProjectDisplayed);
     }
+
 }
