@@ -23,6 +23,18 @@ public class SignUp extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='registration_form']/div[@class='auth_submit_btn']/div[contains(text(),'Sign up')]")
     private WebElement signUpSubmitButton;
 
+    // After successful registration there is a window
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'registration success please Sign in')]")
+    private WebElement successfulRegistrationWindowMessage;
+
+    // After unsuccessful registration error window with error message
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Error')]")
+    private WebElement errorMessage;
+
+    // X in the corner of the window to close it (both successful and unsuccessful)
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement closeWindowButton;
+
     private String signUpName;
 
     private String signUpPassword;
