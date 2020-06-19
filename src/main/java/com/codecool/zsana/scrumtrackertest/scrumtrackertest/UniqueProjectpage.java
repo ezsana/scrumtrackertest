@@ -93,6 +93,61 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//div[@class='ant-modal-content'][3]//span[@class='ant-modal-close-x']")
     private WebElement closeMessageOfSuccessfulEmail;
 
+    // Div container to transfer task - grab the title to identify the task container
+    @FindBy(xpath = "//*[@id='root']//div[@class='task_card']//div[contains(text(),'TransferThisTask')]")
+    private WebElement transferThisTask;
+
+    // Edit task button - EditThisTask
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'EditThisTask')]/preceding-sibling::div[1]//span[@aria-label='form']")
+    private WebElement editThisTaskEditButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='text_input title']")
+    private WebElement editThisTaskTitleInput;
+
+    // This button is the input-title button - following sibling
+    @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='text_input title']/following-sibling::*[1]")
+    private WebElement editThisTaskTitleSaveButton;
+
+    @FindBy(xpath = "//div[@class='ant-modal-content']//textarea[@class='text_input userStory']")
+    private WebElement editThisTaskDescriptionInput;
+
+    // This button is the save button of description- following sibling
+    @FindBy(xpath = "//div[@class='ant-modal-content']//textarea[@class='text_input userStory']/following-sibling::*[1]")
+    private WebElement editThisTaskDescriptionSaveButton;
+
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[1]")
+    private WebElement editThisTaskPriorityInput;
+
+    // This button is the save button of priority - following sibling
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[2]")
+    private WebElement editThisTaskPrioritySaveButton;
+
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[1]")
+    private WebElement editThisTaskOwnerInput;
+
+    // This button is the save button for owner - following sibling
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[2]")
+    private WebElement editThisTaskOwnerSaveButton;
+
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Deadline: ')]/following-sibling::*[1]")
+    private WebElement editThisTaskDeadlineInput;
+
+    // This button is the save button for deadline - following sibling
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Deadline: ')]/following-sibling::*[2]")
+    private WebElement editThisTaskDeadlineSaveButton;
+
+    // X in the corner to close edit window:
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement editThisTaskCloseWindowButton;
+
+    // Sprint progress by user story
+    @FindBy(xpath = "//*[id='root']//div[@class='chart_box'][1]/svg")
+    private WebElement userStoryProgressChart;
+
+    // Sprint progress by value
+    @FindBy(xpath = "//*[id='root']//div[@class='chart_box'][2]/svg")
+    private WebElement valueProgressChart;
+
 
     public WebElement getTodoContainer() {
         return todoContainer;
