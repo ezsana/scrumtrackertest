@@ -10,7 +10,7 @@ public class Homepage extends Basepage {
     private WebElement logoutButton;
 
     @FindBy(xpath = "//*[@id='root']//h1[contains(text(), 'WELCOME ')]")
-    private WebElement heading;
+    private WebElement welcomeHeading;
 
     @FindBy(xpath = "//*[@id='root']//ul[@class='nav-items']")
     private WebElement navbar;
@@ -24,6 +24,14 @@ public class Homepage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='homepage_data_container']/a[@href='/projects']")
     private WebElement checkProjectsLink;
 
+    // Window message after clicking logout button
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Logout successful')]")
+    private WebElement logoutMessage;
+
+    // Button to close logout window
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement closeLogoutWindowButton;
+
     public WebElement getLogoutButton() {
         getWait().until(ExpectedConditions.visibilityOf(logoutButton));
         return logoutButton;
@@ -34,9 +42,9 @@ public class Homepage extends Basepage {
         return projectsButton;
     }
 
-    public WebElement getHeading() {
-        getWait().until(ExpectedConditions.visibilityOf(heading));
-        return heading;
+    public WebElement getWelcomeHeading() {
+        getWait().until(ExpectedConditions.visibilityOf(welcomeHeading));
+        return welcomeHeading;
     }
 
     public WebElement getNavbar() {
@@ -52,4 +60,13 @@ public class Homepage extends Basepage {
     public WebElement getCheckProjectsLink() {
         return checkProjectsLink;
     }
+
+    public WebElement getLogoutMessage() {
+        return logoutMessage;
+    }
+
+    public WebElement getCloseLogoutWindowButton() {
+        return closeLogoutWindowButton;
+    }
+
 }

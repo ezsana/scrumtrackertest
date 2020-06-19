@@ -1,55 +1,63 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SignInTest extends Basetest{
 
-    private Homepage homepage;
     private SignIn signIn;
+    private Homepage homepage;
 
     @BeforeEach
     void setupTests() {
-        Homepage.setUp();
+        Basepage.setUp();
+        Basepage.goToAppUrl();
         signIn = new SignIn();
         homepage = new Homepage();
-        homepage.navigateToPage(homepage.getHomepage());
-        homepage.clickOnElement(homepage.getSignInUpButton());
+        signIn.clickOnElement(signIn.getSignInButton());
     }
 
     @AfterEach
     void closeTests() {
-        Homepage.shutDown();
+        Basepage.shutDown();
     }
+
+    /**
+     * Valid login
+     */
 
     @Test
     void validLogin() {
-        signIn.writeIntoInputField(signIn.getUsernameInputField(), getUsername());
-        signIn.writeIntoInputField(signIn.getPasswordInputField(), getPassword());
-        signIn.clickOnElement(signIn.getSubmitButton());
-        boolean isHeadingOnPage = homepage.isElementPresent(homepage.getHeading());
-        homepage.clickOnElement(homepage.getLogoutButton());
-        Assertions.assertTrue(isHeadingOnPage);
+        signIn.writeIntoInputField(signIn.getSignInUsernameInputField(), getUsername2());
+        signIn.writeIntoInputField(signIn.getSignInPasswordInputField(), getPassword2());
+        signIn.clickOnElement(signIn.getSignInSubmitButton());
+        boolean isWelcomeMessageOnPage = homepage.isElementPresent(homepage.getWelcomeHeading());
+        signIn.logoutForTest(homepage);
+        Assertions.assertTrue(isWelcomeMessageOnPage);
     }
 
-    @Test
-    void invalidLoginWithInvalidCredentials() {
-        signIn.writeIntoInputField(signIn.getUsernameInputField(), getInvalidUsername());
-        signIn.writeIntoInputField(signIn.getPasswordInputField(), getInvalidPassword());
-        signIn.clickOnElement(signIn.getSubmitButton());
-        String message = signIn.getPopUpMessage();
-        signIn.acceptPopUpAlert();
-        Assertions.assertEquals("SignIn failed", message);
-    }
+    /**
+     * Invalid login:
+     *  invalid username
+     *  invalid password
+     *  empty username
+     *  empty password
+     *  all blank fields
+     */
 
-    @Test
-    void invalidLoginWithEmptyFields() {
-        signIn.writeIntoInputField(signIn.getUsernameInputField(), getInvalidUsername());
-        signIn.writeIntoInputField(signIn.getPasswordInputField(), getInvalidPassword());
-        signIn.clickOnElement(signIn.getSubmitButton());
-        String message = signIn.getPopUpMessage();
-        signIn.acceptPopUpAlert();
-        Assertions.assertEquals("SignIn failed", message);
+    @ParameterizedTest
+    @CsvFileSource(resources = "/login.csv", numLinesToSkip = 1)
+    void invalidLoginWithInvalidCredentials(String username, String password) {
+        if (username == null) username = "";
+        if (password == null) password = "";
+        signIn.writeIntoInputField(signIn.getSignInUsernameInputField(), username);
+        signIn.writeIntoInputField(signIn.getSignInPasswordInputField(), password);
+        signIn.clickOnElement(signIn.getSignInSubmitButton());
+        boolean isInvalidLoginMessageDisplayed = signIn.isElementPresent(signIn.getInvalidLoginMessage());
+        signIn.clickOnElement(signIn.getCloseInvalidLoginWindowButton());
+        Assertions.assertTrue(isInvalidLoginMessageDisplayed);
     }
 
 }

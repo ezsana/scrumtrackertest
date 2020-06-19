@@ -44,16 +44,16 @@ class SignUpTest extends Basetest {
 
     /**
      * Invalid registration:
-     * too short username
-     * too short password
-     * blank password
-     * blank username
-     * all-spaces username
-     * all fields blank
+     *  too short username
+     *  too short password
+     *  blank password
+     *  blank username
+     *  all-spaces username
+     *  all fields blank
      */
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/registration.csv", numLinesToSkip = 5)
+    @CsvFileSource(resources = "/registration.csv", numLinesToSkip = 1)
     void invalidRegistration(String username, String password, String email) {
         if (username == null) username = "";
         if (password == null) password = "";
@@ -65,8 +65,9 @@ class SignUpTest extends Basetest {
     }
 
     /**
-     * Too short e-mail
-     * Invalid e-mail
+     * Invalid registration:
+     *  too short e-mail
+     *  invalid e-mail
      */
 
     @ParameterizedTest
@@ -82,7 +83,8 @@ class SignUpTest extends Basetest {
     }
 
     /**
-     * Blank e-mail
+     * Invalid registration:
+     *  blank e-mail field
      */
 
     @Test
@@ -98,7 +100,8 @@ class SignUpTest extends Basetest {
     }
 
     /**
-     * Registration with existing data
+     * Invalid registration:
+     *  registration with existing data
      */
 
     @Test

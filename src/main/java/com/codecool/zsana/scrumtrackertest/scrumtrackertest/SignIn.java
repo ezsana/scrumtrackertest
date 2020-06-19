@@ -5,7 +5,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SignIn extends Basepage {
-    /*
+
 
     @FindBy(xpath = "//*[@id='root']//div[@class='authpage_select_btn_container']/div[contains(text(),'Sign in')]")
     private WebElement signInButton;
@@ -19,12 +19,19 @@ public class SignIn extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='authpage_content']//div[@class='login_form']//div[contains(text(),'Sign in')]")
     private WebElement signInSubmitButton;
 
+    // Pop-up window message about invalid login
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Login failed! Invalid username or password')]")
+    private WebElement invalidLoginMessage;
+
+    // Button to close window
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement closeInvalidLoginWindowButton;
+
     private String username;
 
     private String password;
 
-    void validLogin(Homepage homepage) {
-        clickOnElement(homepage.getSignInUpButton());
+    void validLoginForTest() {
         clickOnElement(signInButton);
         username = "zsana6";
         password = "zsana6";
@@ -33,10 +40,11 @@ public class SignIn extends Basepage {
         clickOnElement(signInSubmitButton);
     }
 
-    void logout(Homepage homepage) {
+    void logoutForTest(Homepage homepage) {
         getWait().until(ExpectedConditions.visibilityOf(homepage.getLogoutButton()));
         clickOnElement(homepage.getLogoutButton());
-        acceptPopUpAlert();
+        getWait().until(ExpectedConditions.visibilityOf(homepage.getLogoutMessage()));
+        clickOnElement(homepage.getCloseLogoutWindowButton());
     }
 
     public WebElement getSignInUsernameInputField() {
@@ -56,5 +64,19 @@ public class SignIn extends Basepage {
         return signInButton;
     }
 
-     */
+    public WebElement getInvalidLoginMessage() {
+        return invalidLoginMessage;
+    }
+
+    public WebElement getCloseInvalidLoginWindowButton() {
+        return closeInvalidLoginWindowButton;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 }
