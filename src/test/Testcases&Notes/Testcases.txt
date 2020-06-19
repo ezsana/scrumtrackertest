@@ -1,72 +1,60 @@
-Homepage
-
-1)
-When I write (localhost:3000) scrumtracker homepage
-I see "Welcome to not Jira"
-And I see [Home, Projects, Registration, Login, Logout] elements
-
-2)
-Given that I'm on scrumtracker homepage
-When I click on Registration button
-I see registration fields to fill and a submit button
-
-3)
-Given that I'm on scrumtracker homepage
-When I click on Login button
-I see login fields to fill and a submit button
-
-4)
-Given that I'm on scrumtracker homepage
-When I click on Projects button
-I see "create a new project" fields to fill and "Create project" button
+Sign up
 
 
-Registration page
-
-5)
-Given I've clicked on Registration button
+Given I've clicked on Sign Up button
 And registration fields can be seen
-When I enter username and password and click on submit button
+When I enter username, password and email and click on Sign up button
 Then pop-up window shows registration success.
 
-6)
-Given that I'm registered
-When I click on pop-up submit button
-Then I see "Welcome to Jira".
 
-7)
-Given I've clicked on Registration button
+Given I've clicked on Sign Up button
 And registration fields can be seen
-When I leave all fields blank and click on submit button
-Then pop-up shows that registration failed.
+When I leave all fields blank and click on Sign up button
+Then pop-up shows that I need to use at least five characters in all fields.
 
-8)
-Given I've clicked on Registration button
+
+Given I've clicked on Sign up button
 And registration fields can be seen
 When I fill fields with already existing account data
-Then pop-up shows that registration failed.
+Then pop-up shows that the account already exists.
+
+
+Given I've clicked on Sign up button
+And registration fields can be seen
+When I write less than 5 characters in username / password with valid e-mail
+Then pop-up shows that I need to use at least five characters in all fields.
+
+
+Given I've clicked on Sign up button
+And registration fields can be seen
+When username / password is blank and e-mail is valid
+Then pop-up shows that I need to use at least five characters in all fields.
+
+
+Given I've clicked on Sign up button
+And registration fields can be seen
+When username / password valid but e-mail is too short or not in "xxxxx@xxxxx.xxx" form
+Then pop-up shows that e-mail is invalid.
+
+
+Given I've clicked on Sign up button
+And registration fields can be seen
+When username / password is valid and e-mail is blank
+Then pop-up shows that all fields are required.
 
 
 Login page
 
-9)
-Given that I'm on scrumtracker homepage
-And clicked on Login button
+
+Given that I've clicked on Sign in button
 When I enter valid username and valid password
-Then I see "Welcome to Jira"
-And I can create new project.
+Then I see a welcome message on the screen.
 
-10)
-Given that I'm on scrumtracker homepage
-And clicked on Login button
-When I enter invalid username and/or invalid password
-Then pop-up shows that login failed.
 
-11)
-Given that I have previous projects saved
-When I log in
-And I click on Projects button
-Then I can see a list of my projects.
+Given that I've clicked on Sign in button
+When I enter invalid / empty username and / or invalid password
+Then pop-up shows invalid login.
+
 
 Logout
 

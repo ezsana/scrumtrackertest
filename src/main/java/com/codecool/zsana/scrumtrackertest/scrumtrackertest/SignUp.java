@@ -31,7 +31,7 @@ public class SignUp extends Basepage {
     @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Error')]")
     private WebElement errorMessage;
 
-    // Mesage to use at least five character
+    // Message to use at least five character
     @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Please use at least five character to your username/password')]")
     private WebElement atLeastFiveCharMessage;
 
