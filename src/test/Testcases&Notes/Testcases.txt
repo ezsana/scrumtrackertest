@@ -43,7 +43,7 @@ When username / password is valid and e-mail is blank
 Then pop-up shows that all fields are required.
 
 
-Login page
+Sign in
 
 
 Given that I've clicked on Sign in button
@@ -55,6 +55,13 @@ Given that I've clicked on Sign in button
 When I enter invalid / empty username and / or invalid password
 Then pop-up shows invalid login.
 
+
+Homepage
+
+
+Given that I'm logged in
+After homepage is loaded
+Then all of these web elements are seen: homepage / Projects / Logout buttons; welcome message; link to projects
 
 Logout
 
