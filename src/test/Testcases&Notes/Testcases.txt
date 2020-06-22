@@ -63,19 +63,9 @@ Given that I'm logged in
 After homepage is loaded
 Then all of these web elements are seen: homepage / Projects / Logout buttons; welcome message; link to projects
 
-Logout
 
-12)
-Given that I'm logged in
-When I click on Logout button
-Then a pop-up window shows that logout was succesful.
+All projects page
 
-Projects
-
-13)
-Given that I'm not logged in
-And I write in the "create new project" field and click on "create project" button
-I'm not able to create new project
 
 14)
 Given that I'm logged in and I'm on the Projects page
@@ -161,12 +151,21 @@ Given that I've clicked on the invite participant button
 When I fill in the input and click on the add participant button
 Then the invited participant's name in seen.
 
+
+Logout
+
+12)
+Given that I'm logged in
+When I click on Logout button
+Then a pop-up window shows that logout was succesful.
+
 Questions:
 Can we have more than one project with the same name?
 Can we have more than one status with the same name?
 Can we have more than one task with the same name?
 => yes -> testcases for this
 => no -> testcases for this
+
 
 
 
