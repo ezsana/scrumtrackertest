@@ -12,7 +12,7 @@ public class Basepage {
 
     private static WebDriver driver;
     private  static WebDriverWait wait;
-    private String homepage = "http://192.168.1.105:3000";
+    private static String homepage = "http://192.168.1.105:3000";
 
     Basepage() {
         PageFactory.initElements(new AjaxElementLocatorFactory(driver, 10), this);
@@ -30,6 +30,10 @@ public class Basepage {
             driver.close();
             driver.quit();
         }
+    }
+
+    public static void goToAppUrl() {
+        driver.navigate().to(homepage);
     }
 
     public boolean isElementPresent(WebElement element) {

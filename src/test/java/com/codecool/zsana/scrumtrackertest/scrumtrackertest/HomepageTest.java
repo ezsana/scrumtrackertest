@@ -6,52 +6,50 @@ import org.junit.jupiter.api.*;
 class HomepageTest extends Basetest{
 
     private Homepage homepage;
-    private Registration registration;
-    private Projectspage projectspage;
+    private SignIn signIn;
 
-    @BeforeEach
+    @BeforeAll
     void setupTests() {
-        Homepage.setUp();
+        Basepage.setUp();
+        Basepage.goToAppUrl();
         homepage = new Homepage();
-        registration = new Registration();
-        projectspage = new Projectspage();
-        homepage.navigateToPage(homepage.getHomepage());
+        signIn = new SignIn();
+        signIn.validLoginForTest();
     }
 
-    @AfterEach
+    @AfterAll
     void closeTests() {
-        Homepage.shutDown();
+        signIn.logoutForTest(homepage);
+        Basepage.shutDown();
+    }
+
+    /**
+     * Check all elements on homepage are visible
+     */
+
+    @Test
+    void homeButtonIsVisible() {
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getHomeButton()));
     }
 
     @Test
-    void homepageHeadingAppear() {
-        Assertions.assertTrue(homepage.isElementPresent(homepage.getHeading()));
+    void projectsButtonIsVisible() {
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getProjectsButton()));
     }
 
     @Test
-    void homepageNavbarAppears() {
-        Assertions.assertTrue(homepage.isElementPresent(homepage.getNavbar()));
+    void logoutButtonIsVisible() {
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getLogoutButton()));
     }
 
     @Test
-    void clickOnSignInUpLeadsSignInUpPage() {
-        homepage.clickOnElement(homepage.getSignInUpButton());
-        registration.clickOnElement(registration.getRegistrationButton());
-        Assertions.assertTrue(registration.isElementPresent(registration.getUsernameInputField()));
-        Assertions.assertTrue(registration.isElementPresent(registration.getPasswordInputField()));
+    void welcomeMessageIsVisible() {
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getWelcomeHeading()));
     }
 
     @Test
-    void clickOnHomeLeadsHomePage() {
-        homepage.clickOnElement(homepage.getHomeButton());
-        Assertions.assertTrue(homepage.isElementPresent(homepage.getHeading()));
+    void projectMessageIsVisible() {
+        Assertions.assertTrue(homepage.isElementPresent(homepage.getCheckProjectsLink()));
     }
-
-    @Test
-    void clickOnProjectsLeadsProjectsPage() {
-        homepage.clickOnElement(homepage.getProjectsButton());
-        Assertions.assertTrue(projectspage.isElementPresent(projectspage.getCreateProjectInput()));
-    }
-
 
 }

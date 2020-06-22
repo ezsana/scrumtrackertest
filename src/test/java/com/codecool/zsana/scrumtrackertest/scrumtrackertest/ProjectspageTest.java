@@ -1,65 +1,100 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.*;
+import org.openqa.selenium.WebElement;
 
 class ProjectspageTest {
 
     private Homepage homepage;
-    private Login login;
+    private SignIn signIn;
     private Projectspage projectspage;
 
     @BeforeEach
     void setupTests() {
-        Homepage.setUp();
-        login = new Login();
+        Basepage.setUp();
+        signIn = new SignIn();
         homepage = new Homepage();
         projectspage = new Projectspage();
-        homepage.navigateToPage(homepage.getHomepage());
+        Basepage.goToAppUrl();
+        signIn.validLoginForTest();
+        homepage.clickOnElement(homepage.getProjectsButton());
     }
 
     @AfterEach
     void closeTests() {
-        Homepage.shutDown();
+        signIn.logoutForTest(homepage);
+        Basepage.shutDown();
     }
 
+    /**
+     * Check if all projects are available on the projects page
+     */
+
+    @Order(1)
     @Test
-    @Disabled
-    void withoutLogInCreatingProjectNotPossible() {
-        homepage.clickOnElement(homepage.getProjectsButton());
-        projectspage.writeIntoInputField(projectspage.getCreateProjectInput(), "New project");
-        projectspage.clickOnElement(projectspage.getSubmitButton());
-        // Here I would have to get a message that I have to log in to create projects.
+    void allProjectsAreOnPage() {
+        boolean isBaseProjectForTestPresent = projectspage.isElementPresent(projectspage.getBaseProjectForTestTitle());
+        boolean isShareThisProjectPresent = projectspage.isElementPresent(projectspage.getShareThisProjectTitle());
+        boolean isArchiveThisProjectPresent = projectspage.isElementPresent(projectspage.getArchiveThisProjectTitle());
+        Assertions.assertTrue(isBaseProjectForTestPresent);
+        Assertions.assertTrue(isShareThisProjectPresent);
+        Assertions.assertTrue(isArchiveThisProjectPresent);
     }
 
-    @Test
-    void projectsAreOnPageWithLogin() {
-        login.validLogin(homepage);
-        homepage.clickOnElement(homepage.getProjectsButton());
-        boolean isProjectPresent = projectspage.isElementPresent(projectspage.getProject1());
-        login.logout(homepage);
-        Assertions.assertTrue(isProjectPresent);
-    }
+    /**
+     * Project creation is not possible with less than three character
+     */
 
+    @Order(2)
     @Test
     void createProjectNotPossibleWithLessThanThreeChar() {
-        login.validLogin(homepage);
-        homepage.clickOnElement(homepage.getProjectsButton());
-        projectspage.createNewProject("ne");
-        String message = homepage.getPopUpMessage();
-        homepage.acceptPopUpAlert();
-        login.logout(homepage);
-        Assertions.assertEquals("minimum 3 character", message);
+        projectspage.createNewProjectWithInvalidName("pr");
+        boolean errorMessage = projectspage.isElementPresent(projectspage.getTitleLessThanThreeCharErrorMessage());
+        projectspage.getCloseErrorWindow().click();
+        Assertions.assertTrue(errorMessage);
     }
 
+    /**
+     * New project created is seen on page
+     */
+
+    @Order(3)
     @Test
     void newProjectIsDisplayedOnPage() {
-        login.validLogin(homepage);
-        homepage.clickOnElement(homepage.getProjectsButton());
-        //homepage.clickOnElement(homepage.getProjectsButton());
-        projectspage.createNewProject("New project 1234");
-        boolean newProjectDisplayed = projectspage.isNewProjectDisplayed("New project 1234");
-        projectspage.deleteProject("New project 1234");
-        login.logout(homepage);
-        Assertions.assertTrue(newProjectDisplayed);
+        projectspage.createNewProject("AddAndDeleteThisProject");
+        Assertions.assertTrue(projectspage.isNewProjectDisplayed("AddAndDeleteThisProject"));
     }
+
+    /**
+     * Delete project test
+     */
+
+    @Order(4)
+    @Test
+    void deleteProjectIsWorking() {
+        WebElement project = projectspage.searchElementByText("AddAndDeleteThisProject");
+        projectspage.deleteProject("AddAndDeleteThisProject");
+        Assertions.assertTrue(projectspage.elementIsNotPresent(project));
+    }
+
+    /**
+     * Archive project test
+     */
+
+    @Order(5)
+    @Test
+    void archiveProjectWorking() {
+        Assertions.assertTrue(projectspage.projectIsInArchivedProjectsContainer());
+    }
+
+    /**
+     * Unarchive project test
+     */
+
+    @Order(6)
+    @Test
+    void unarchiveProjectWorking() {
+        Assertions.assertTrue(projectspage.projectIsUnarchived());
+    }
+
 }

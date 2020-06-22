@@ -1,6 +1,7 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -9,39 +10,57 @@ import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElem
 
 public class Projectspage extends Basepage {
 
-    @FindBy(xpath = "//input[@class='sc-AxiKw hzGrch']")
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_text']")
+    private WebElement yourProjectsHeading;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'BaseProjectForTest')]")
+    private WebElement baseProjectForTestTitle;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'ShareThisProject')]")
+    private WebElement shareThisProjectTitle;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'ArchiveThisProject')]")
+    private WebElement archiveThisProjectTitle;
+
+    // Archive project sign before AND after archiving:
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_card']/div[contains(text(),'ArchiveThisProject')]/preceding-sibling::div[@class='project_tool_container']/span[@aria-label='api']")
+    private WebElement archiveThisProjectSign;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_page__create_project_container']//input[@placeholder='Project Name']")
     private WebElement createProjectInput;
 
-    @FindBy(xpath = "//*[@id=\"root\"]//div[@class='project_page__create_project_container']//span")
-    private WebElement submitButton;
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_page__create_project_container']//span[@aria-label='plus-circle']")
+    private WebElement createProjectSubmitButton;
 
-    @FindBy(xpath = "//div[@class='project_card'][1]")
-    private WebElement project1;
+    @FindBy(xpath = "//*[@id='root']//div[@class='project_text archive']")
+    private WebElement showAndHideArchiveProjects;
 
-    @FindBy(xpath = "//div[@class='project_card'][2]")
-    private WebElement proji;
+    // Error message if project title is less than 3 char
+    @FindBy(xpath = "//div[@class='ant-modal-body']//span[contains(text(),'Project title must be minimum 3 character')]")
+    private WebElement titleLessThanThreeCharErrorMessage;
 
-    public WebElement getCreateProjectInput() {
-        getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
-        return createProjectInput;
-    }
+    // X to close error window
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement closeErrorWindow;
 
-    public WebElement getSubmitButton() {
-        getWait().until(ExpectedConditions.visibilityOf(submitButton));
-        return submitButton;
-    }
+    // Container where all the archived projects are
+    @FindBy(xpath = "//div[@class='project_page']/div[@class='sc-AxhCb ixaEwJ'][4]")
+    WebElement archivedProjectsContainer;
 
-    public WebElement getProject1() {
-        getWait().until(ExpectedConditions.visibilityOf(project1));
-        return project1;
-    }
 
     public WebElement createNewProject(String projectName) {
         getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
         writeIntoInputField(createProjectInput, projectName);
-        getWait().until(ExpectedConditions.visibilityOf(submitButton));
-        clickOnElement(submitButton);
+        getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
+        clickOnElement(createProjectSubmitButton);
         return getWait().until(visibilityOfElementLocated(By.xpath("//*[contains(text(),'" + projectName + "')]")));
+    }
+
+    public void createNewProjectWithInvalidName(String invalidProjectName) {
+        getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
+        writeIntoInputField(createProjectInput, invalidProjectName);
+        getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
+        clickOnElement(createProjectSubmitButton);
     }
 
     public boolean isNewProjectDisplayed(String projectName) {
@@ -49,15 +68,78 @@ public class Projectspage extends Basepage {
     }
 
     public void deleteProject(String projectName) {
-        WebElement textDemo = searchElementByText(projectName);
-        getWait().until(ExpectedConditions.visibilityOf(textDemo));
-        WebElement grandParent = textDemo.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
-        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
+        WebElement projectCardTitle = searchElementByText(projectName);
+        getWait().until(ExpectedConditions.visibilityOf(projectCardTitle));
+        WebElement parent = projectCardTitle.findElement(By.xpath("./.."));
+        WebElement bin = parent.findElement(By.className("project_tool_container")).findElement(By.xpath("./span[@aria-label='delete']"));
         getWait().until(ExpectedConditions.visibilityOf(bin));
         bin.click();
     }
 
-    public WebElement getProji() {
-        return proji;
+    public void archiveAndUnarchiveProject() {
+        getWait().until(ExpectedConditions.visibilityOf(archiveThisProjectSign));
+        archiveThisProjectSign.click();
+    }
+
+    boolean projectIsInArchivedProjectsContainer() {
+        archiveAndUnarchiveProject();
+        showAndHideArchiveProjects.click();
+        WebElement project = getDriver().findElement(By.xpath("//div[@class='project_page']/div[@class='sc-AxhCb ixaEwJ'][4]//div[contains(text(),'ArchiveThisProject')]"));
+        return project.isDisplayed();
+    }
+
+    boolean projectIsUnarchived() {
+        showAndHideArchiveProjects.click();
+        archiveAndUnarchiveProject();
+        for (int i = 0; i < 100; i++) {
+            try {
+                getWait().until(ExpectedConditions.visibilityOf(getDriver().findElement(By.xpath("//*[@id='root']//div[@class='sc-AxhCb ixaEwJ project_page__project_list_container'][1]//div[contains(text(),'ArchiveThisProject')]"))));
+
+            } catch (NoSuchElementException nsee) {}
+        }
+        WebElement project = getDriver().findElement(By.xpath("//*[@id='root']//div[@class='sc-AxhCb ixaEwJ project_page__project_list_container'][1]//div[contains(text(),'ArchiveThisProject')]"));
+        return project.isDisplayed();
+    }
+
+    public WebElement getYourProjectsHeading() {
+        return yourProjectsHeading;
+    }
+
+    public WebElement getBaseProjectForTestTitle() {
+        return baseProjectForTestTitle;
+    }
+
+    public WebElement getShareThisProjectTitle() {
+        return shareThisProjectTitle;
+    }
+
+    public WebElement getArchiveThisProjectTitle() {
+        return archiveThisProjectTitle;
+    }
+
+    public WebElement getArchiveThisProjectSign() {
+        return archiveThisProjectSign;
+    }
+
+    public WebElement getShowAndHideArchiveProjects() {
+        return showAndHideArchiveProjects;
+    }
+
+    public WebElement getTitleLessThanThreeCharErrorMessage() {
+        return titleLessThanThreeCharErrorMessage;
+    }
+
+    public WebElement getCloseErrorWindow() {
+        return closeErrorWindow;
+    }
+
+    public WebElement getCreateProjectInput() {
+        getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
+        return createProjectInput;
+    }
+
+    public WebElement getCreateProjectSubmitButton() {
+        getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
+        return createProjectSubmitButton;
     }
 }

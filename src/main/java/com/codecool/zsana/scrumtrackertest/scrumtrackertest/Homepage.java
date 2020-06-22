@@ -6,28 +6,31 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class Homepage extends Basepage {
 
-    @FindBy(xpath = "//a[.='Sign in / up']")
-    private WebElement signInUpButton;
-
-    @FindBy(xpath = "//a[.='Logout']")
+    @FindBy(xpath = "//*[@id='root']//li[@class='nav-item']/a[contains(text(),'Logout')]")
     private WebElement logoutButton;
 
-    @FindBy(xpath = "//*[@id=\"root\"]/div/div/h1")
-    private WebElement heading;
+    @FindBy(xpath = "//*[@id='root']//h1[contains(text(), 'WELCOME ')]")
+    private WebElement welcomeHeading;
 
-    @FindBy(xpath = "//*[@id=\"root\"]/div/nav/ul")
+    @FindBy(xpath = "//*[@id='root']//ul[@class='nav-items']")
     private WebElement navbar;
 
-    @FindBy(xpath = "//a[contains(.,'Home')]")
+    @FindBy(xpath = "//*[@id='root']//li[@class='nav-item']/a[contains(text(),' Home')]")
     private WebElement homeButton;
 
-    @FindBy(xpath = "//*[@id=\"root\"]//a[@href=\"/projects\"]")
+    @FindBy(xpath = "//*[@id='root']//li[@class='nav-item']/a[contains(text(),' Projects')]")
     private WebElement projectsButton;
 
-    public WebElement getSignInUpButton() {
-        getWait().until(ExpectedConditions.visibilityOf(signInUpButton));
-        return signInUpButton;
-    }
+    @FindBy(xpath = "//*[@id='root']//div[@class='homepage_data_container']/a[@href='/projects']")
+    private WebElement checkProjectsLink;
+
+    // Window message after clicking logout button
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'Logout successful')]")
+    private WebElement logoutMessage;
+
+    // Button to close logout window
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement closeLogoutWindowButton;
 
     public WebElement getLogoutButton() {
         getWait().until(ExpectedConditions.visibilityOf(logoutButton));
@@ -39,9 +42,9 @@ public class Homepage extends Basepage {
         return projectsButton;
     }
 
-    public WebElement getHeading() {
-        getWait().until(ExpectedConditions.visibilityOf(heading));
-        return heading;
+    public WebElement getWelcomeHeading() {
+        getWait().until(ExpectedConditions.visibilityOf(welcomeHeading));
+        return welcomeHeading;
     }
 
     public WebElement getNavbar() {
@@ -53,4 +56,17 @@ public class Homepage extends Basepage {
         getWait().until(ExpectedConditions.visibilityOf(homeButton));
         return homeButton;
     }
+
+    public WebElement getCheckProjectsLink() {
+        return checkProjectsLink;
+    }
+
+    public WebElement getLogoutMessage() {
+        return logoutMessage;
+    }
+
+    public WebElement getCloseLogoutWindowButton() {
+        return closeLogoutWindowButton;
+    }
+
 }
