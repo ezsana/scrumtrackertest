@@ -27,12 +27,6 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='task_card']/div[contains(text(),'EditThisTask')]")
     private WebElement editThisTaskTitle;
 
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='task_card']/div[contains(text(),'ShareThisTask')]")
-    private WebElement shareThisTaskTitle;
-
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='task_card']/div[contains(text(),'SendThisTaskByEmail')]")
-    private WebElement sendThisTaskByEmailTitle;
-
     @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//div[@class='add_new_task']")
     private WebElement addNewTaskButtonInDoneStatus;
 
@@ -70,6 +64,7 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//div[@class='ant-modal-content']/button[@aria-label='Close']")
     private WebElement closeAddNewParticipantWindow;
 
+    // Send project by e-mail icon
     @FindBy(xpath = "//*[@id='root']//span[@aria-label='mail']")
     private  WebElement sendEmailButton;
 
@@ -89,9 +84,13 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//span[contains(text(),'Successful e-mail sending')]")
     private WebElement messageOfSuccessfulEmailSending;
 
-    // Pop-up window after sending the email
+    // Close button of pop-up window after sending the email
     @FindBy(xpath = "//div[@class='ant-modal-content'][3]//span[@class='ant-modal-close-x']")
     private WebElement closeMessageOfSuccessfulEmail;
+
+    // Limit In Progress task count icon
+    @FindBy(xpath = "//*[@id='root']//span[@aria-label='file-excel']")
+    private WebElement limitInProgressTaskCount;
 
     // Div container to transfer task - grab the title to identify the task container
     @FindBy(xpath = "//*[@id='root']//div[@class='task_card']//div[contains(text(),'TransferThisTask')]")
@@ -148,6 +147,14 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[id='root']//div[@class='chart_box'][2]/svg")
     private WebElement valueProgressChart;
 
+    // Task distribution container / need owner
+    @FindBy(xpath = "//div[@class='task_distribution_container']/div[contains(text(),'need owner')]")
+    private WebElement needOwnerTask;
+
+    // Edit this task owner: zsana 6 - after editing the task, check the distribution:
+    @FindBy (xpath = "//div[@class='task_distribution_container']/div[contains(text(),'zsana6')]")
+    private WebElement zsana6Task;
+
 
     public WebElement getTodoContainer() {
         return todoContainer;
@@ -167,14 +174,6 @@ public class UniqueProjectpage extends Basepage {
 
     public WebElement getEditThisTaskTitle() {
         return editThisTaskTitle;
-    }
-
-    public WebElement getShareThisTaskTitle() {
-        return shareThisTaskTitle;
-    }
-
-    public WebElement getSendThisTaskByEmailTitle() {
-        return sendThisTaskByEmailTitle;
     }
 
     public WebElement getAddNewTaskButtonInDoneStatus() {
