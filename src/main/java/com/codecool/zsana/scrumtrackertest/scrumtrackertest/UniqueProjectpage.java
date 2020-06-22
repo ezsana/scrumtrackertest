@@ -1,6 +1,7 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,11 +31,19 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//div[@class='add_new_task']")
     private WebElement addNewTaskButtonInDoneStatus;
 
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//input[class='add_new_task_text']")
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//div[@class='add_new_task_container']/input")
     private WebElement addNewTaskInputInDoneStatus;
 
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//input[class='add_new_task_btn']")
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//div[@class='add_new_task_btn']")
     private WebElement addNewTaskSubmitButtonInDoneStatus;
+
+    // Error window message
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'please minimum 3 character!')]")
+    private WebElement errorMessage;
+
+    // Error window close button (X)
+    @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
+    private WebElement errorWindowCloseButton;
 
     @FindBy(xpath = "//*[@id='add_status_icon']")
     private WebElement addNewStatusIcon;
@@ -42,7 +51,7 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[4]//input[@class='add_new_column_text']")
     private WebElement addNewStatusInputField;
 
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[4]//input[@class='add_new_column_btn']")
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[4]//div[@class='add_new_column_btn']")
     private WebElement addNewStatusSubmitButton;
 
     @FindBy(xpath = "//*[@id='root']//span[@aria-label='usergroup-add']")
@@ -156,15 +165,54 @@ public class UniqueProjectpage extends Basepage {
     private WebElement zsana6Task;
 
 
-    public WebElement getTodoContainer() {
+    void addNewStatus(String statusName) {
+        addNewStatusIcon.click();
+        addNewStatusInputField.sendKeys(statusName);
+        addNewStatusSubmitButton.click();
+    }
+
+    void addNewTask(String taskName) {
+        addNewTaskButtonInDoneStatus.click();
+        for (int i = 0; i < 10; i++) {
+            try {
+                getWait().until(ExpectedConditions.visibilityOf(addNewTaskInputInDoneStatus));
+            } catch (NoSuchElementException nse) {}
+        }
+        addNewTaskInputInDoneStatus.click();
+        writeIntoInputField(addNewTaskInputInDoneStatus, taskName);
+        for (int i = 0; i < 10; i++) {
+            try {
+                getWait().until(ExpectedConditions.visibilityOf(addNewTaskSubmitButtonInDoneStatus));
+            } catch (NoSuchElementException nse) {}
+        }
+        clickOnElement(addNewTaskSubmitButtonInDoneStatus);
+    }
+
+    void deleteTask(WebElement task) {
+        WebElement parent = task.findElement(By.xpath("./.."));
+        WebElement bin = parent.findElement(By.className("status_tool_container")).findElement(By.xpath(".//span[@aria-label='delete']"));
+        getWait().until(ExpectedConditions.visibilityOf(bin));
+        bin.click();
+        getWait().until(ExpectedConditions.invisibilityOf(task));
+    }
+
+    void deleteStatus(WebElement status) {
+        WebElement grandParent = status.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
+        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
+        getWait().until(ExpectedConditions.visibilityOf(bin));
+        bin.click();
+        getWait().until(ExpectedConditions.invisibilityOf(status));
+    }
+
+    WebElement getTodoContainer() {
         return todoContainer;
     }
 
-    public WebElement getInProgressContainer() {
+    WebElement getInProgressContainer() {
         return inProgressContainer;
     }
 
-    public WebElement getDoneContainer() {
+    WebElement getDoneContainer() {
         return doneContainer;
     }
 
@@ -244,29 +292,83 @@ public class UniqueProjectpage extends Basepage {
         return closeMessageOfSuccessfulEmail;
     }
 
-    public void addNewStatus(String statusName) {
-        writeIntoInputField(addNewStatusIcon, statusName);
-        clickOnElement(addNewStatusSubmitButton);
+    public WebElement getErrorMessage() {
+        return errorMessage;
     }
 
-    public void addNewTask(String taskName) {
-        writeIntoInputField(addNewTaskButtonInDoneStatus, taskName);
-        clickOnElement(addNewTaskSubmitButtonInDoneStatus);
+    public WebElement getErrorWindowCloseButton() {
+        return errorWindowCloseButton;
     }
 
-    public void deleteTask(WebElement task) {
-        WebElement grandParent = task.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
-        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
-        getWait().until(ExpectedConditions.visibilityOf(bin));
-        bin.click();
-        getWait().until(ExpectedConditions.invisibilityOf(task));
+    public WebElement getLimitInProgressTaskCount() {
+        return limitInProgressTaskCount;
     }
 
-    public void deleteStatus(WebElement status) {
-        WebElement grandParent = status.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
-        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
-        getWait().until(ExpectedConditions.visibilityOf(bin));
-        bin.click();
-        getWait().until(ExpectedConditions.invisibilityOf(status));
+    public WebElement getTransferThisTask() {
+        return transferThisTask;
+    }
+
+    public WebElement getEditThisTaskEditButton() {
+        return editThisTaskEditButton;
+    }
+
+    public WebElement getEditThisTaskTitleInput() {
+        return editThisTaskTitleInput;
+    }
+
+    public WebElement getEditThisTaskTitleSaveButton() {
+        return editThisTaskTitleSaveButton;
+    }
+
+    public WebElement getEditThisTaskDescriptionInput() {
+        return editThisTaskDescriptionInput;
+    }
+
+    public WebElement getEditThisTaskDescriptionSaveButton() {
+        return editThisTaskDescriptionSaveButton;
+    }
+
+    public WebElement getEditThisTaskPriorityInput() {
+        return editThisTaskPriorityInput;
+    }
+
+    public WebElement getEditThisTaskPrioritySaveButton() {
+        return editThisTaskPrioritySaveButton;
+    }
+
+    public WebElement getEditThisTaskOwnerInput() {
+        return editThisTaskOwnerInput;
+    }
+
+    public WebElement getEditThisTaskOwnerSaveButton() {
+        return editThisTaskOwnerSaveButton;
+    }
+
+    public WebElement getEditThisTaskDeadlineInput() {
+        return editThisTaskDeadlineInput;
+    }
+
+    public WebElement getEditThisTaskDeadlineSaveButton() {
+        return editThisTaskDeadlineSaveButton;
+    }
+
+    public WebElement getEditThisTaskCloseWindowButton() {
+        return editThisTaskCloseWindowButton;
+    }
+
+    public WebElement getUserStoryProgressChart() {
+        return userStoryProgressChart;
+    }
+
+    public WebElement getValueProgressChart() {
+        return valueProgressChart;
+    }
+
+    public WebElement getNeedOwnerTask() {
+        return needOwnerTask;
+    }
+
+    public WebElement getZsana6Task() {
+        return zsana6Task;
     }
 }

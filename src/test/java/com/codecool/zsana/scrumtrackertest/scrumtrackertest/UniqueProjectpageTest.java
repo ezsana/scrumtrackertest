@@ -120,9 +120,9 @@ class UniqueProjectpageTest extends Basetest {
     @Test
     void addNewTaskWithLessThanThreeChar() {
         uniqueProjectpage.addNewTask("ne");
-        String message = uniqueProjectpage.getPopUpMessage();
-        uniqueProjectpage.acceptPopUpAlert();
-        Assertions.assertEquals("add title (minimum 3 character) to the new task", message);
+        boolean errorMessage = uniqueProjectpage.isElementPresent(uniqueProjectpage.getErrorMessage());
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getErrorWindowCloseButton());
+        Assertions.assertTrue(errorMessage);
     }
 
     /**
