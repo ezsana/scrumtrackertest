@@ -2,12 +2,11 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.jupiter.api.Test;
 
+/**
+ * To make this test reusable, the ShareThisProject is deleted and created again.
+ */
+
 public class ShareProjectTest extends Basetest {
-
-
-    /**
-     * To make this test reusable, the ShareThisProject is deleted and created again.
-     */
 
     /**
      * Invite participant is working

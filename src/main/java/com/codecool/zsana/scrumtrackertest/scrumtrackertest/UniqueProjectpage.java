@@ -15,7 +15,7 @@ public class UniqueProjectpage extends Basepage {
     private WebElement todoContainer;
 
     // Second column / container: In Progress
-    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][2]")
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][2]//h4")
     private WebElement inProgressContainer;
 
     // Third column / container: Done
@@ -36,6 +36,15 @@ public class UniqueProjectpage extends Basepage {
 
     @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][3]//div[@class='add_new_task_btn']")
     private WebElement addNewTaskSubmitButtonInDoneStatus;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='add_new_task']")
+    private WebElement addNewTaskButtonInToDoStatus;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='add_new_task_container']/input")
+    private WebElement addNewTaskInputInToDoStatus;
+
+    @FindBy(xpath = "//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]//div[@class='add_new_task_btn']")
+    private WebElement addNewTaskSubmitButtonInToDoStatus;
 
     // Error window message
     @FindBy(xpath = "//div[@class='ant-modal-content']//span[contains(text(),'please minimum 3 character!')]")
@@ -78,7 +87,7 @@ public class UniqueProjectpage extends Basepage {
     private  WebElement sendEmailButton;
 
     // Pop-up window: send email
-    @FindBy(xpath = "//div[@class='ant-modal-content']/button[@aria-label='Close']")
+    @FindBy(xpath = "//div[2]/div[@class='ant-modal-root']//button[@aria-label='Close']/span")
     private WebElement closeSendEmailWindow;
 
     // Pop-up window: send email
@@ -94,12 +103,40 @@ public class UniqueProjectpage extends Basepage {
     private WebElement messageOfSuccessfulEmailSending;
 
     // Close button of pop-up window after sending the email
-    @FindBy(xpath = "//div[@class='ant-modal-content'][3]//span[@class='ant-modal-close-x']")
+    @FindBy(xpath = "html/body/div[3]//div[@class='ant-modal-content']/button/span")
     private WebElement closeMessageOfSuccessfulEmail;
+
+    // Error message after using invalid e-mail address
+    @FindBy(xpath = "//span[contains(text(),\"Incorrect Email form use 'example@example.com'-form\")]")
+    private WebElement invalidEmailMessage;
+
+    // Error window close button
+    @FindBy(xpath = "//span[contains(text(),\"Incorrect Email form use 'example@example.com'-form\")]/parent::*/parent::*/preceding-sibling::button/span")
+    private WebElement invalidEmailErrorWindowCloseButton;
 
     // Limit In Progress task count icon
     @FindBy(xpath = "//*[@id='root']//span[@aria-label='file-excel']")
     private WebElement limitInProgressTaskCount;
+
+    // Limit In Progress window input field
+    @FindBy(xpath = "//*[contains(text(),'Limit the in progress task count')]/parent::*/following-sibling::*/input")
+    private WebElement limitInProgressWindowInput;
+
+    // Limit In Progress window send button
+    @FindBy(xpath = "//*[contains(text(),'Limit the in progress task count')]/parent::*/following-sibling::*/button")
+    private WebElement limitInProgressWindowSendButton;
+
+    // Limit In Progress window close button
+    @FindBy(xpath = "//*[contains(text(),'Limit the in progress task count')]/parent::*/parent::*/preceding-sibling::button/span")
+    private WebElement limitInProgressWindowCloseButton;
+
+    // Successful message after closing Limit In Progress window
+    @FindBy(xpath = "//*[contains(text(),'Successful new limit is:')]")
+    private WebElement limitInProgressSuccessfulMessage;
+
+    // Close button of successful message window after closing Limit In Progress window
+    @FindBy(xpath = "//*[contains(text(),'Successful new limit is:')]/parent::*/parent::*/preceding-sibling::button/span")
+    private WebElement limitInProgressSuccessfulButton;
 
     // Div container to transfer task - grab the title to identify the task container
     @FindBy(xpath = "//*[@id='root']//div[@class='task_card']//div[contains(text(),'TransferThisTask')]")
@@ -108,6 +145,14 @@ public class UniqueProjectpage extends Basepage {
     // Edit task button - EditThisTask
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'EditThisTask')]/preceding-sibling::div[1]//span[@aria-label='form']")
     private WebElement editThisTaskEditButton;
+
+    // Button after the task is edited
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='form']")
+    private WebElement editedTaskEditButton;
+
+    // Button to delete edited task
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='delete']")
+    private WebElement editedTaskDeletebutton;
 
     @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='text_input title']")
     private WebElement editThisTaskTitleInput;
@@ -123,8 +168,12 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//div[@class='ant-modal-content']//textarea[@class='text_input userStory']/following-sibling::*[1]")
     private WebElement editThisTaskDescriptionSaveButton;
 
-    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[1]")
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[1]//span[@class='ant-select-selection-item']")
     private WebElement editThisTaskPriorityInput;
+
+    // Choose 3 from the list of priority
+    @FindBy(xpath = "//div/div[@class='ant-select-item-option-content'][contains(text(),'3')]")
+    private WebElement editThisTaskChooseThreeOption;
 
     // This button is the save button of priority - following sibling
     @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[2]")
@@ -133,11 +182,15 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[1]")
     private WebElement editThisTaskOwnerInput;
 
+    // After clicking on editThisTaskOwnerInput, choose this option from list - zsana6
+    @FindBy(xpath = "/html/body/div[4]/div/div/div/div[2]//div[contains(text(),'zsana6')]") //div[@class='ant-select-dropdown ant-select-dropdown-placement-bottomLeft ']//div[@class='ant-select-item-option-content']
+    private WebElement editThisTaskChooseOwnerFromList;
+
     // This button is the save button for owner - following sibling
     @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[2]")
     private WebElement editThisTaskOwnerSaveButton;
 
-    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Deadline: ')]/following-sibling::*[1]")
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Deadline: ')]/following-sibling::*[1]//input")
     private WebElement editThisTaskDeadlineInput;
 
     // This button is the save button for deadline - following sibling
@@ -171,21 +224,15 @@ public class UniqueProjectpage extends Basepage {
         addNewStatusSubmitButton.click();
     }
 
-    void addNewTask(String taskName) {
-        addNewTaskButtonInDoneStatus.click();
-        for (int i = 0; i < 10; i++) {
+    void addNewTask(String taskName, WebElement addNewTaskButton, WebElement addNewTaskInput, WebElement addNewTaskSubmit) {
+        for (int i = 0; i < 5; i++) {
             try {
-                getWait().until(ExpectedConditions.visibilityOf(addNewTaskInputInDoneStatus));
-            } catch (NoSuchElementException nse) {}
+                addNewTaskButton.click();
+            } catch (Exception e) {
+            }
         }
-        addNewTaskInputInDoneStatus.click();
-        writeIntoInputField(addNewTaskInputInDoneStatus, taskName);
-        for (int i = 0; i < 10; i++) {
-            try {
-                getWait().until(ExpectedConditions.visibilityOf(addNewTaskSubmitButtonInDoneStatus));
-            } catch (NoSuchElementException nse) {}
-        }
-        clickOnElement(addNewTaskSubmitButtonInDoneStatus);
+        writeIntoInputField(addNewTaskInput, taskName);
+        clickOnElement(addNewTaskSubmit);
     }
 
     void deleteTask(WebElement task) {
@@ -198,10 +245,80 @@ public class UniqueProjectpage extends Basepage {
 
     void deleteStatus(WebElement status) {
         WebElement grandParent = status.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
-        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span"));
-        getWait().until(ExpectedConditions.visibilityOf(bin));
+        WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span[@aria-label='delete']"));
         bin.click();
         getWait().until(ExpectedConditions.invisibilityOf(status));
+    }
+
+    void sendProjectByEmail(String emailAddress) {
+        sendEmailButton.click();
+        this.writeIntoInputField(sendEmailInputField, emailAddress);
+        sendEmailPopUpWindowButton.click();
+    }
+
+    void setLimitInProgress(int limit) {
+        limitInProgressTaskCount.click();
+        this.writeIntoInputField(limitInProgressWindowInput, String.valueOf(limit));
+        limitInProgressWindowSendButton.click();
+    }
+
+    void transferTask(WebElement element, WebElement to) {
+        this.dragElement(element, to);
+    }
+
+    boolean taskIsTransferred(String status) {
+        WebElement task = getDriver().findElement(By.xpath("//*[contains(text(),'TransferThisTask')]"));
+        WebElement projectColumn = task.findElement(By.xpath("./..")).findElement(By.xpath("./..")); // grandparent
+        String statusName = projectColumn.findElement(By.xpath("./div/h3")).getText();
+        return status.equals(statusName);
+    }
+
+    void editTask(String title, String description, String date, WebElement priority, WebElement owner, boolean saveEditedTask) {
+        clickOnElement(editThisTaskEditButton);
+        editThisTaskTitleInput.clear();
+        writeIntoInputField(editThisTaskTitleInput, title);
+        editThisTaskDescriptionInput.clear();
+        writeIntoInputField(editThisTaskDescriptionInput, description);
+        clickOnElement(editThisTaskPriorityInput);
+        clickOnElement(priority);
+        clickOnElement(editThisTaskOwnerInput);
+        clickOnElement(owner);
+        writeIntoInputField(editThisTaskDeadlineInput, date);
+        if (saveEditedTask) {
+            clickOnElement(editThisTaskDeadlineSaveButton);
+        }
+        clickOnElement(editThisTaskCloseWindowButton);
+    }
+
+    void editTaskTitle(String title) {
+        clickOnElement(editThisTaskEditButton);
+        writeIntoInputField(editThisTaskTitleInput, title);
+    }
+
+    String getTitleAfterEditTask(String title) {
+        WebElement taskTitle = getDriver().findElement(By.xpath("//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]" +
+                "//div[@class='task_card']/div[contains(text(),'" + title + "')]"));
+        return taskTitle.getText();
+    }
+
+    String getDescriptionAfterEditTask() {
+        return editThisTaskDescriptionInput.getText();
+    }
+
+    int getPriorityAfterEditTask() {
+        return Integer.valueOf(editThisTaskPriorityInput.getText());
+    }
+
+    String getOwnerAfterEditTask() {
+        WebElement own = getDriver().findElement(By.xpath("//div[@class='task_data_selector']/" +
+                "label[contains(text(),'Owner: ')]/following-sibling::*[1]//span[@class='ant-select-selection-item']"));
+        return own.getText();
+    }
+
+    String getDeadlineAfterEditTask(String deadline) {
+        WebElement dl = getDriver().findElement(By.xpath("//div[@class='task_data_selector']/" +
+                "label[contains(text(),'Deadline: ')]/following-sibling::*[1]//input[@title=" + deadline + "]"));
+        return dl.getAttribute("title");
     }
 
     WebElement getTodoContainer() {
@@ -370,5 +487,61 @@ public class UniqueProjectpage extends Basepage {
 
     public WebElement getZsana6Task() {
         return zsana6Task;
+    }
+
+    public WebElement getInvalidEmailMessage() {
+        return invalidEmailMessage;
+    }
+
+    public WebElement getInvalidEmailErrorWindowCloseButton() {
+        return invalidEmailErrorWindowCloseButton;
+    }
+
+    public WebElement getLimitInProgressWindowInput() {
+        return limitInProgressWindowInput;
+    }
+
+    public WebElement getLimitInProgressWindowSendButton() {
+        return limitInProgressWindowSendButton;
+    }
+
+    public WebElement getLimitInProgressWindowCloseButton() {
+        return limitInProgressWindowCloseButton;
+    }
+
+    public WebElement getLimitInProgressSuccessfulMessage() {
+        return limitInProgressSuccessfulMessage;
+    }
+
+    public WebElement getLimitInProgressSuccessfulButton() {
+        return limitInProgressSuccessfulButton;
+    }
+
+    public WebElement getEditThisTaskChooseThreeOption() {
+        return editThisTaskChooseThreeOption;
+    }
+
+    public WebElement getEditThisTaskChooseOwnerFromList() {
+        return editThisTaskChooseOwnerFromList;
+    }
+
+    public WebElement getAddNewTaskButtonInToDoStatus() {
+        return addNewTaskButtonInToDoStatus;
+    }
+
+    public WebElement getAddNewTaskInputInToDoStatus() {
+        return addNewTaskInputInToDoStatus;
+    }
+
+    public WebElement getAddNewTaskSubmitButtonInToDoStatus() {
+        return addNewTaskSubmitButtonInToDoStatus;
+    }
+
+    public WebElement getEditedTaskEditButton() {
+        return editedTaskEditButton;
+    }
+
+    public WebElement getEditedTaskDeletebutton() {
+        return editedTaskDeletebutton;
     }
 }

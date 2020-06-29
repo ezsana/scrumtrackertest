@@ -2,6 +2,8 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebElement;
 
@@ -96,7 +98,7 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void addNewTaskIsWorkingTest() {
-        uniqueProjectpage.addNewTask("AddAndDeleteThisTask");
+        uniqueProjectpage.addNewTask("AddAndDeleteThisTask", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
         WebElement task = uniqueProjectpage.searchElementByText("AddAndDeleteThisTask");
         Assertions.assertTrue(task.isDisplayed());
     }
@@ -119,7 +121,7 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void addNewTaskWithLessThanThreeChar() {
-        uniqueProjectpage.addNewTask("ne");
+        uniqueProjectpage.addNewTask("ne", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
         boolean errorMessage = uniqueProjectpage.isElementPresent(uniqueProjectpage.getErrorMessage());
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getErrorWindowCloseButton());
         Assertions.assertTrue(errorMessage);
@@ -131,7 +133,10 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void sendProjectDetailsByEmail() {
-
+        uniqueProjectpage.sendProjectByEmail("zsana6@zsana6.com");
+        boolean successfulEmailSending =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getMessageOfSuccessfulEmailSending());
+        uniqueProjectpage.getCloseMessageOfSuccessfulEmail().click();
+        Assertions.assertTrue(successfulEmailSending);
     }
 
     /**
@@ -140,7 +145,11 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void sendEmailWithInvalidEmailAddress() {
-
+        uniqueProjectpage.sendProjectByEmail("invalid address");
+        boolean invalidEmail =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getInvalidEmailMessage());
+        uniqueProjectpage.getInvalidEmailErrorWindowCloseButton().click();
+        uniqueProjectpage.getCloseSendEmailWindow().click();
+        Assertions.assertTrue(invalidEmail);
     }
 
     /**
@@ -149,7 +158,13 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void limitInProgressTaskCount() {
-
+        uniqueProjectpage.setLimitInProgress(2);
+        boolean success = uniqueProjectpage.isElementPresent(uniqueProjectpage.getLimitInProgressSuccessfulMessage());
+        uniqueProjectpage.getLimitInProgressSuccessfulButton().click();
+        // Set limit to 0 for later test executions
+        uniqueProjectpage.setLimitInProgress(0);
+        uniqueProjectpage.getLimitInProgressSuccessfulButton().click();
+        Assertions.assertTrue(success);
     }
 
     /**
@@ -159,16 +174,47 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void transferTaskWorking() {
-
+        uniqueProjectpage.transferTask(uniqueProjectpage.getTransferThisTask(), uniqueProjectpage.getInProgressContainer());
+        boolean success = uniqueProjectpage.taskIsTransferred("In Progress");
+        // Task moved back to original place
+        uniqueProjectpage.transferTask(uniqueProjectpage.getTransferThisTask(), uniqueProjectpage.getTodoContainer());
+        Assertions.assertTrue(success);
     }
 
     /**
      * Edit task working
      */
 
-    @Test
-    void editTaskWorking() {
+    @TestFactory
+    Collection<DynamicTest> editTaskWorking() {
+        String title = "Edited title";
+        String description = "Edited description";
+        String date = generateDate();
+        WebElement priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
+        WebElement owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
+        uniqueProjectpage.editTask(title, description, date, priority, owner, true);
+        //Open the edit task again
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditedTaskEditButton());
 
+        // Get all data
+        String editedTitle = uniqueProjectpage.getTitleAfterEditTask(title);
+        String editedDescription = uniqueProjectpage.getDescriptionAfterEditTask();
+        int editedPriority = uniqueProjectpage.getPriorityAfterEditTask();
+        String editedOwner = uniqueProjectpage.getOwnerAfterEditTask();
+        String editedDate = uniqueProjectpage.getDeadlineAfterEditTask(date);
+
+        //Close window
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskCloseWindowButton());
+
+        // Change back the original values for later tests - delete EditThisTask and create it again
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditedTaskDeletebutton());
+        uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
+
+        return Arrays.asList(DynamicTest.dynamicTest("Title check", () -> assertEquals(title, editedTitle)),
+                DynamicTest.dynamicTest("Description check", () -> assertEquals(description, editedDescription)),
+                DynamicTest.dynamicTest("Priority check", () -> assertEquals(3, editedPriority)),
+                DynamicTest.dynamicTest("Owner check", () -> assertEquals("zsana6", editedOwner)),
+        DynamicTest.dynamicTest("Date check", () -> assertEquals(date, editedDate)));
     }
 
     /**
@@ -177,20 +223,48 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void taskTitleMinimumThreeChar() {
-
+        String title = "ti";
+        uniqueProjectpage.editTaskTitle(title);
+        // TODO
+        // Get message
     }
 
     /**
      * Edit task not happening when changes are not saved
      */
 
-    @Test
-    void editingTaskWithoutSavingIsNotPossible() {
+    @TestFactory
+    Collection<DynamicTest> editingTaskWithoutSavingIsNotPossible() {
+        String title = "Edited title";
+        String description = "Edited description";
+        String date = generateDate();
+        WebElement priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
+        WebElement owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
+        uniqueProjectpage.editTask(title, description, date, priority, owner, false);
 
+        // Open edit task window again
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskEditButton());
+
+        // Get all data
+        String editedTitle = uniqueProjectpage.getTitleAfterEditTask(title);
+        String editedDescription = uniqueProjectpage.getDescriptionAfterEditTask();
+        int editedPriority = uniqueProjectpage.getPriorityAfterEditTask();
+        String editedOwner = uniqueProjectpage.getOwnerAfterEditTask();
+        String editedDate = uniqueProjectpage.getDeadlineAfterEditTask(date);
+
+        // Close edit task window
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskCloseWindowButton());
+
+        return Arrays.asList(DynamicTest.dynamicTest("Title check", () -> assertNotEquals(title, editedTitle)),
+                DynamicTest.dynamicTest("Description check", () -> assertNotEquals(description, editedDescription)),
+                DynamicTest.dynamicTest("Priority check", () -> assertNotEquals(3, editedPriority)),
+                DynamicTest.dynamicTest("Owner check", () -> assertNotEquals("zsana6", editedOwner)),
+                DynamicTest.dynamicTest("Date check", () -> assertNotEquals(date, editedDate)));
     }
 
     /**
      * Sprint progress by user story
+     * All tasks are in To Do so the progress circle should be red az 100%
      */
 
     @Test
