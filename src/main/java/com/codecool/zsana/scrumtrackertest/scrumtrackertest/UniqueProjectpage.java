@@ -157,6 +157,10 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='delete']")
     private WebElement editedTaskDeletebutton;
 
+    // Button to delete EditThisTask
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'EditThisTask')]/preceding-sibling::div[1]//span[@aria-label='delete']")
+    private WebElement editThisTaskDeletebutton;
+
     @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='text_input title']")
     private WebElement editThisTaskTitleInput;
 
@@ -205,11 +209,11 @@ public class UniqueProjectpage extends Basepage {
     private WebElement editThisTaskCloseWindowButton;
 
     // Sprint progress by user story
-    @FindBy(xpath = "//*[id='root']//div[@class='chart_box'][1]/svg")
+    @FindBy(xpath = "//div[@class='chart_box'][1]")
     private WebElement userStoryProgressChart;
 
     // Sprint progress by value
-    @FindBy(xpath = "//*[id='root']//div[@class='chart_box'][2]/svg")
+    @FindBy(xpath = "//div[@class='chart_box'][2]")
     private WebElement valueProgressChart;
 
     // Task distribution container / need owner
@@ -298,6 +302,14 @@ public class UniqueProjectpage extends Basepage {
         editThisTaskTitleInput.clear();
         writeIntoInputField(editThisTaskTitleInput, title);
         clickOnElement(editThisTaskTitleSaveButton);
+        clickOnElement(editThisTaskCloseWindowButton);
+    }
+
+    void editValue() {
+        clickOnElement(editThisTaskEditButton);
+        clickOnElement(editThisTaskPriorityInput);
+        clickOnElement(editThisTaskChooseThreeOption);
+        clickOnElement(editThisTaskPrioritySaveButton);
         clickOnElement(editThisTaskCloseWindowButton);
     }
 
@@ -547,5 +559,9 @@ public class UniqueProjectpage extends Basepage {
 
     public WebElement getLessThanThreeCharTaskEditButton() {
         return lessThanThreeCharTaskEditButton;
+    }
+
+    public WebElement getEditThisTaskDeletebutton() {
+        return editThisTaskDeletebutton;
     }
 }

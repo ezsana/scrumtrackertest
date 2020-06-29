@@ -266,12 +266,12 @@ class UniqueProjectpageTest extends Basetest {
 
     /**
      * Sprint progress by user story
-     * All tasks are in To Do so the progress circle should be red az 100%
+     * All tasks are in To Do so the progress circle should be red and 100%
      */
 
     @Test
     void sprintProgressByUserStory() {
-
+        Assertions.assertTrue(uniqueProjectpage.getUserStoryProgressChart().getText().contains("100 %"));
     }
 
     /**
@@ -280,6 +280,14 @@ class UniqueProjectpageTest extends Basetest {
 
     @Test
     void sprintProgressByValue() {
-
+        // Change EditThisTask value to 3
+        uniqueProjectpage.editValue();
+        // Check if value is three total
+        boolean valueIsThree = uniqueProjectpage.getValueProgressChart().getText().contains("3 total");
+        // Delete EditThisTask and create it again
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskDeletebutton());
+        uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
+        // Assert value
+        Assertions.assertTrue(valueIsThree);
     }
 }
