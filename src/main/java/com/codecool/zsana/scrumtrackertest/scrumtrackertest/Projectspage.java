@@ -43,9 +43,21 @@ public class Projectspage extends Basepage {
     @FindBy(xpath = "//div[@class='ant-modal-content']//span[@aria-label='close']")
     private WebElement closeErrorWindow;
 
-    // Container where all the archived projects are
-    @FindBy(xpath = "//div[@class='project_page']/div[@class='sc-AxhCb ixaEwJ'][4]")
-    WebElement archivedProjectsContainer;
+    // Container where all the shared projects are
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Projects I participated in')]/parent::div/following-sibling::div[1]/div")
+    private WebElement sharedProjectsContainer;
+
+    // Shared project delete button
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Projects I participated in')]/parent::div/following-sibling::div[1]/div/div[@class='project_tool_container']/span[@aria-label='delete']")
+    private WebElement deleteSharedProjectButton;
+
+    // Error message after trying to delete the shared project with different user (zsana)
+    @FindBy(xpath = "//span[contains(text(),'You are not the project owner')]")
+    private WebElement sharedProjectDeleteErrorMessage;
+
+    // Button to close error message - shared project deletion
+    @FindBy(xpath = "//span[contains(text(),'You are not the project owner')]/parent::div/parent::div/preceding-sibling::button")
+    private WebElement sharedProjectDeleteErrorMessageCloseButton;
 
 
     public WebElement createNewProject(String projectName) {
@@ -101,6 +113,10 @@ public class Projectspage extends Basepage {
         return project.isDisplayed();
     }
 
+    void deleteArchivedProject() {
+
+    }
+
     public WebElement getYourProjectsHeading() {
         return yourProjectsHeading;
     }
@@ -141,5 +157,25 @@ public class Projectspage extends Basepage {
     public WebElement getCreateProjectSubmitButton() {
         getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
         return createProjectSubmitButton;
+    }
+
+    public WebElement getSharedProjectsContainer() {
+        return sharedProjectsContainer;
+    }
+
+    public WebElement getDeletesharedProjectButton() {
+        return deleteSharedProjectButton;
+    }
+
+    public WebElement getDeleteSharedProjectButton() {
+        return deleteSharedProjectButton;
+    }
+
+    public WebElement getSharedProjectDeleteErrorMessage() {
+        return sharedProjectDeleteErrorMessage;
+    }
+
+    public WebElement getSharedProjectDeleteErrorMessageCloseButton() {
+        return sharedProjectDeleteErrorMessageCloseButton;
     }
 }

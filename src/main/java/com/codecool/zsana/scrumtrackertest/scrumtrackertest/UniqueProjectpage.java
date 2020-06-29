@@ -1,6 +1,7 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -311,6 +312,27 @@ public class UniqueProjectpage extends Basepage {
         clickOnElement(editThisTaskChooseThreeOption);
         clickOnElement(editThisTaskPrioritySaveButton);
         clickOnElement(editThisTaskCloseWindowButton);
+    }
+
+    void inviteParticipant(String participant) {
+        clickOnElement(addNewParticipantButton);
+        writeIntoInputField(getAddNewParticipantInputField, participant);
+        getAddNewParticipantInputField.sendKeys(Keys.ENTER);
+        clickOnElement(getAddNewParticipantGreenManButton);
+        clickOnElement(closeAddNewParticipantWindow);
+    }
+
+    // At the moment participant only can be: zsana
+    boolean isParticipantInvited(String participant) {
+        clickOnElement(addNewParticipantButton);
+        boolean display = true;
+        try {
+            getNewParticipantName.isDisplayed();
+        } catch (Exception e) {
+            display = false;
+        }
+        clickOnElement(closeAddNewParticipantWindow);
+        return display;
     }
 
     String getTitleAfterEditTask() {

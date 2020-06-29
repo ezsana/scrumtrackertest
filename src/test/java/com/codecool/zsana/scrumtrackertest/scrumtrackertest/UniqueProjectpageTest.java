@@ -29,7 +29,7 @@ class UniqueProjectpageTest extends Basetest {
         Basepage.goToAppUrl();
         signIn.validLoginForTest();
         homepage.clickOnElement(homepage.getProjectsButton());
-        projectspage.clickOnElement(projectspage.getBaseProjectForTestTitle());
+        projectspage.clickOnElement(projectspage.getShareThisProjectTitle());
     }
 
     @AfterAll
