@@ -97,4 +97,28 @@ class ProjectspageTest {
         Assertions.assertTrue(projectspage.projectIsUnarchived());
     }
 
+    /**
+     * Shared projects can be seen on page
+     */
+
+    @Order(7)
+    @Test
+    void projectIsAvailableInParticipantAccount() {
+        String sharedProjectTitle = "zsanaProjectShare";
+        String projectText = projectspage.getSharedProjectsContainer().getText();
+        Assertions.assertEquals(sharedProjectTitle, projectText);
+    }
+
+    /**
+     * Shared project is not possible to delete
+     */
+
+    @Order(8)
+    @Test
+    void deletionNotPossibleInParticipantAccount() {
+        projectspage.clickOnElement(projectspage.getDeleteSharedProjectButton());
+        boolean alertDisplay = projectspage.getSharedProjectDeleteErrorMessage().isDisplayed();
+        projectspage.clickOnElement(projectspage.getSharedProjectDeleteErrorMessageCloseButton());
+        Assertions.assertTrue(alertDisplay);
+    }
 }
