@@ -1,5 +1,8 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Basetest {
 
     private String username = "zsana6";
@@ -32,5 +35,11 @@ public class Basetest {
 
     public String getEmail2() {
         return email2;
+    }
+
+    public String generateDate() {
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM.dd");
+        return dateTime.format(formatter);
     }
 }
