@@ -1,7 +1,6 @@
 package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -150,6 +149,10 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='form']")
     private WebElement editedTaskEditButton;
 
+    // Button after the task edited with less than three characters
+    @FindBy(xpath = "//*[@id='root']//div[contains(text(),'uu')]/preceding-sibling::div[1]//span[@aria-label='form']")
+    private WebElement lessThanThreeCharTaskEditButton;
+
     // Button to delete edited task
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='delete']")
     private WebElement editedTaskDeletebutton;
@@ -179,7 +182,7 @@ public class UniqueProjectpage extends Basepage {
     @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Priority: ')]/following-sibling::*[2]")
     private WebElement editThisTaskPrioritySaveButton;
 
-    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[1]")
+    @FindBy(xpath = "//div[@class='task_data_selector']/label[contains(text(),'Owner: ')]/following-sibling::*[1]//span[@class='ant-select-selection-item']")
     private WebElement editThisTaskOwnerInput;
 
     // After clicking on editThisTaskOwnerInput, choose this option from list - zsana6
@@ -290,15 +293,16 @@ public class UniqueProjectpage extends Basepage {
         clickOnElement(editThisTaskCloseWindowButton);
     }
 
-    void editTaskTitle(String title) {
-        clickOnElement(editThisTaskEditButton);
+    void editTaskTitle(String title, WebElement taskEditButton) {
+        clickOnElement(taskEditButton);
+        editThisTaskTitleInput.clear();
         writeIntoInputField(editThisTaskTitleInput, title);
+        clickOnElement(editThisTaskTitleSaveButton);
+        clickOnElement(editThisTaskCloseWindowButton);
     }
 
-    String getTitleAfterEditTask(String title) {
-        WebElement taskTitle = getDriver().findElement(By.xpath("//*[@id='root']//div[@class='scrum_table']/div[@class='project_column'][1]" +
-                "//div[@class='task_card']/div[contains(text(),'" + title + "')]"));
-        return taskTitle.getText();
+    String getTitleAfterEditTask() {
+        return editThisTaskTitleInput.getAttribute("value");
     }
 
     String getDescriptionAfterEditTask() {
@@ -310,15 +314,11 @@ public class UniqueProjectpage extends Basepage {
     }
 
     String getOwnerAfterEditTask() {
-        WebElement own = getDriver().findElement(By.xpath("//div[@class='task_data_selector']/" +
-                "label[contains(text(),'Owner: ')]/following-sibling::*[1]//span[@class='ant-select-selection-item']"));
-        return own.getText();
+        return editThisTaskOwnerInput.getText();
     }
 
     String getDeadlineAfterEditTask(String deadline) {
-        WebElement dl = getDriver().findElement(By.xpath("//div[@class='task_data_selector']/" +
-                "label[contains(text(),'Deadline: ')]/following-sibling::*[1]//input[@title=" + deadline + "]"));
-        return dl.getAttribute("title");
+        return editThisTaskDeadlineInput.getAttribute("value");
     }
 
     WebElement getTodoContainer() {
@@ -543,5 +543,9 @@ public class UniqueProjectpage extends Basepage {
 
     public WebElement getEditedTaskDeletebutton() {
         return editedTaskDeletebutton;
+    }
+
+    public WebElement getLessThanThreeCharTaskEditButton() {
+        return lessThanThreeCharTaskEditButton;
     }
 }

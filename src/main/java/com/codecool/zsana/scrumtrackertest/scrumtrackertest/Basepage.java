@@ -56,6 +56,10 @@ public class Basepage {
         driver.navigate().to(url);
     }
 
+    public void refreshPage() {
+        driver.navigate().refresh();
+    }
+
     public void acceptPopUpAlert() {
         for (int i = 0; i < 100; i++) {
             try {

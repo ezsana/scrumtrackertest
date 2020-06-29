@@ -2,8 +2,6 @@ package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
 
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.runners.MethodSorters;
 import org.openqa.selenium.WebElement;
 
@@ -197,7 +195,7 @@ class UniqueProjectpageTest extends Basetest {
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditedTaskEditButton());
 
         // Get all data
-        String editedTitle = uniqueProjectpage.getTitleAfterEditTask(title);
+        String editedTitle = uniqueProjectpage.getTitleAfterEditTask();
         String editedDescription = uniqueProjectpage.getDescriptionAfterEditTask();
         int editedPriority = uniqueProjectpage.getPriorityAfterEditTask();
         String editedOwner = uniqueProjectpage.getOwnerAfterEditTask();
@@ -219,14 +217,17 @@ class UniqueProjectpageTest extends Basetest {
 
     /**
      * Edit task: title can't be less than three character
+     * This test fails at the moment
      */
 
     @Test
     void taskTitleMinimumThreeChar() {
-        String title = "ti";
-        uniqueProjectpage.editTaskTitle(title);
-        // TODO
-        // Get message
+        String title = "uu";
+        uniqueProjectpage.editTaskTitle(title, uniqueProjectpage.getEditThisTaskEditButton());
+        boolean titleChange = uniqueProjectpage.searchElementByText(title).isDisplayed(); // Have the title changed?
+        // Get back the original title - temporary solution as this test should pass in future development
+        uniqueProjectpage.editTaskTitle("EditThisTask", uniqueProjectpage.getLessThanThreeCharTaskEditButton());
+        Assertions.assertFalse(titleChange);
     }
 
     /**
@@ -241,12 +242,13 @@ class UniqueProjectpageTest extends Basetest {
         WebElement priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
         WebElement owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
         uniqueProjectpage.editTask(title, description, date, priority, owner, false);
+        uniqueProjectpage.refreshPage();
 
         // Open edit task window again
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskEditButton());
 
         // Get all data
-        String editedTitle = uniqueProjectpage.getTitleAfterEditTask(title);
+        String editedTitle = uniqueProjectpage.getTitleAfterEditTask();
         String editedDescription = uniqueProjectpage.getDescriptionAfterEditTask();
         int editedPriority = uniqueProjectpage.getPriorityAfterEditTask();
         String editedOwner = uniqueProjectpage.getOwnerAfterEditTask();
