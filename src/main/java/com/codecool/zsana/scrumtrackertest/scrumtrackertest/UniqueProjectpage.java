@@ -323,7 +323,7 @@ public class UniqueProjectpage extends Basepage {
     }
 
     // At the moment participant only can be: zsana
-    boolean isParticipantInvited(String participant) {
+    boolean isParticipantInvited() {
         clickOnElement(addNewParticipantButton);
         boolean display = true;
         try {

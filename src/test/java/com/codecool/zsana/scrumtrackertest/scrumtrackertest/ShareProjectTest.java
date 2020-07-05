@@ -47,7 +47,7 @@ public class ShareProjectTest extends Basetest {
     void inviteParticipant() {
         String participant = "zsana";
         uniqueProjectpage.inviteParticipant(participant);
-        Assertions.assertTrue(uniqueProjectpage.isParticipantInvited(participant));
+        Assertions.assertTrue(uniqueProjectpage.isParticipantInvited());
     }
 
     /**
@@ -58,7 +58,7 @@ public class ShareProjectTest extends Basetest {
     void invitationWithNonExistingUser() {
         String invalidParticipant = "invalidUser";
         uniqueProjectpage.inviteParticipant(invalidParticipant);
-        Assertions.assertFalse(uniqueProjectpage.isParticipantInvited(invalidParticipant));
+        Assertions.assertFalse(uniqueProjectpage.isParticipantInvited());
     }
 
 }
