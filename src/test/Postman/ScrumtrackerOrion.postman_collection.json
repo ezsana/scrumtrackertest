@@ -33,11 +33,11 @@
 							"let username = user.concat(date.toString());",
 							"let pass = \"scrumtracker\";",
 							"let password = pass.concat(date.toString);",
+							"let newUserEmail = username.concat(\"@mail.com\");",
 							"",
 							"pm.globals.set(\"username\", username);",
 							"pm.globals.set(\"password\", password);",
-							"",
-							"console.log(typeof username);"
+							"pm.globals.set(\"newUserEmail\", newUserEmail);"
 						],
 						"type": "text/javascript"
 					}
@@ -54,10 +54,301 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\"\n}",
+					"raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\",\n\t\"email\": \"{{newUserEmail}}\"\n}",
 					"options": {
 						"raw": {}
 					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration - invalid1 - fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7be5673d-f307-4887-85a5-326efcd2c18d",
+						"exec": [
+							"// No response body, so just checking the response code:",
+							"",
+							"pm.test(\"Unsuccessful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400,401,402,403,404,405]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "7fc59095-1d85-4ee0-949b-4f5dd22d0a10",
+						"exec": [
+							"// invalid username - one letter",
+							"let u = \"q\";",
+							"// invalid password - one letter",
+							"let p = \"w\";",
+							"// valid e-mail:",
+							"let umail = \"qqq@iii.com\";",
+							"",
+							"pm.globals.set(\"u\", u);",
+							"pm.globals.set(\"p\", p);",
+							"pm.globals.set(\"uMail\", umail);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{u}}\",\n\t\"password\": \"{{p}}\",\n\t\"email\": \"{{uMail}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration - invalid2 - fail",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3961d3b5-8eb4-4bf4-b3ee-f9b1c4d3fd3e",
+						"exec": [
+							"// new user's name: scrumtracker + date but e-mail is missing!",
+							"let date = Date.now();",
+							"let user = \"scrumtracker\";",
+							"let username = user.concat(date.toString());",
+							"let pass = \"scrumtracker\";",
+							"let password = pass.concat(date.toString);",
+							"",
+							"pm.globals.set(\"username1\", username);",
+							"pm.globals.set(\"password1\", password);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "78fb66e4-dd6a-4878-a9d7-34249fb73fd8",
+						"exec": [
+							"// E-mail is missing, should not allow to sign up:",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400,401,402,403,404,405]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{username1}}\",\n\t\"password\": \"{{password1}}\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration - invalid3 - fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "07ed1963-9ced-41ad-96af-b7d6d267204b",
+						"exec": [
+							"// Null username and null password - not possible to sign up:",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400,401,402,403,404,405]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "39d080a0-2d21-4ad4-87fc-c7bd3c7170c0",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"\",\n\t\"password\": \"\",\n\t\"email\": \"rr@ppp.com\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration - invalid4 - fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "7aa90906-ec81-4897-ae05-1e5ad6b4036d",
+						"exec": [
+							"// Null username and null password, null email - not possible to sign up:",
+							"",
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400,401,402,403,404,405]);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "29693e08-4e19-4b82-8d5e-5ac8003266f7",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"\",\n\t\"password\": \"\",\n\t\"email\": \"\"\n}",
+					"options": {
+						"raw": {}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/auth/registration",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"auth",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Registration - invalid5 - fail",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6c4223c4-16f2-41d5-a761-dd7e41328df7",
+						"exec": [
+							"// Username, password, email: spaces",
+							"",
+							"pm.test(\"Unsuccessful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([400,401,402,403,404,405]);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"      \",\n\t\"password\": \"      \",\n\t\"email\": \"     @    .   \"\n}"
 				},
 				"url": {
 					"raw": "{{baseUrl}}/auth/registration",
@@ -429,17 +720,12 @@
 							"        // Get the id of all tasks:",
 							"        let tasks = statuses[i].tasks;",
 							"        for (let y = 0; y < tasks.length; y++) {",
-							"            if (tasks[y].storyTitle === \"TransferThisTask\") {",
-							"                // get Id of task:",
+							"            if (tasks[y].title === \"TransferThisTask\") {",
+							"                // get Id of tasks:",
 							"                pm.globals.set(\"transferThisTaskID\", tasks[y].id);",
-							"            } else if (tasks[y].storyTitle === \"SendThisTaskByEmail\") {",
-							"                pm.globals.set(\"sendThisTaskByEmailID\", tasks[y].id);",
-							"            } else if (tasks[y].storyTitle === \"ArchiveThisTask\") {",
-							"                pm.globals.set(\"archiveThisTaskID\", tasks[y].id);",
-							"            } else if (tasks[y].storyTitle === \"EditThisTask\") {",
+							"                console.log(\"I am here.\");",
+							"            } else if (tasks[y].title === \"EditThisTask\") {",
 							"                pm.globals.set(\"editThisTaskID\", tasks[y].id);",
-							"            } else if (tasks[y].storyTitle === \"ShareThisTask\") {",
-							"                pm.globals.set(\"shareThisTaskID\", tasks[y].id);",
 							"            }",
 							"        }",
 							"    }",
@@ -448,8 +734,6 @@
 							"pm.test(\"All tasks available\", function () {",
 							"    pm.expect(result).to.eql(3);",
 							"})",
-							"",
-							"",
 							"",
 							""
 						],
@@ -624,6 +908,122 @@
 							"key": "tableid",
 							"value": "{{BaseProjectForTestTableID}}"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Project table limit",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "63b78493-4d2c-44c2-a53f-3bd3d75668b0",
+						"exec": [
+							"let limit = 3;",
+							"",
+							"pm.globals.set(\"limit\", limit);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "623b55dc-9cc7-4297-82c7-d0bc8d42fb99",
+						"exec": [
+							"// 200 ok response",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200,201,202);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{BaseProjectForTestTableID}}\",\n    \"taskLimit\": \"{{limit}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/table/limit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"table",
+						"limit"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Project table limit default value back",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "654cab83-cc34-4389-9bec-c783bfd0020c",
+						"exec": [
+							"let limit = 0;",
+							"",
+							"pm.globals.set(\"defaultLimit\", limit);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "b38807cd-f54d-48ba-bb33-43560847e33b",
+						"exec": [
+							"// 200 ok response",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200,201,202);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{BaseProjectForTestTableID}}\",\n    \"taskLimit\": \"{{defaultLimit}}\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/project/table/limit",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"table",
+						"limit"
 					]
 				}
 			},
@@ -913,7 +1313,7 @@
 							"        let y;",
 							"        // iterate through tasks in Done status",
 							"        for (y = 0; y < tasks.length; y++) {",
-							"            if (tasks[y].storyTitle === \"TransferThisTask\") {",
+							"            if (tasks[y].title === \"TransferThisTask\") {",
 							"                result++;",
 							"            }",
 							"        }",
@@ -1026,15 +1426,25 @@
 							"let task = pm.response.json();",
 							"",
 							"pm.test(\"Title matches\", function () {",
-							"    pm.expect(task.storyTitle).to.eql(\"This is a new title\");",
+							"    pm.expect(task.title).to.eql(pm.globals.get(\"taskTitle\"));",
 							"});",
 							"",
 							"pm.test(\"Description matches\", function () {",
-							"    pm.expect(task.userStory).to.eql(\"This is a new description\");",
+							"    pm.expect(task.description).to.eql(pm.globals.get(\"description\"));",
 							"});",
 							"",
-							"pm.test(\"Business value is 2\", function () {",
-							"    pm.expect(task.businessValue).to.eql(2);",
+							"pm.test(\"Priority is 3\", function () {",
+							"    pm.expect(task.priority).to.eql(pm.globals.get(\"priority\"));",
+							"});",
+							"/*",
+							"pm.test(\"Owner is zsana6\", function () {",
+							"    pm.expect(task.owner).to.eql(pm.globals.get(\"{{owner}}\"));",
+							"});",
+							"*/",
+							"",
+							"pm.test(\"Deadline is today's date\", function () {",
+							"    let dl = task.deadline.toString().substring(0,10)",
+							"    pm.expect(dl).to.eql(pm.globals.get(\"deadline\").substring(0,10));",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1045,6 +1455,39 @@
 					"script": {
 						"id": "3561e711-65f7-41fe-81e6-1b83802f5418",
 						"exec": [
+							"let taskTitle = \"This is a new title\";",
+							"let description = \"This is a new description\";",
+							"let priority = 3;",
+							"// Get the date of today:",
+							"/*",
+							"let dt = new Date();",
+							"let month;",
+							"if (dt.getMonth().toString().length === 1) {",
+							"    month = \"0\" + (dt.getMonth() + 1).toString();",
+							"} else {",
+							"    month = (dt.getMonth() + 1).toString();",
+							"}",
+							"",
+							"let day;",
+							"",
+							"if (dt.getDate().toString().length === 1) {",
+							"    day = \"0\" + dt.getDate().toString();",
+							"} else {",
+							"    day = dt.getDate().toString();",
+							"}",
+							"",
+							"let deadline = month + \".\" + day;",
+							"*/",
+							"let deadline = new Date();",
+							"let owner = \"zsana6\";",
+							"let ownerId = \"40685fe1-bc73-4b94-8212-eccb78458078\";",
+							"",
+							"pm.globals.set(\"taskTitle\", taskTitle);",
+							"pm.globals.set(\"description\", description);",
+							"pm.globals.set(\"priority\", priority);",
+							"pm.globals.set(\"deadline\", deadline);",
+							"pm.globals.set(\"owner\", owner);",
+							"pm.globals.set(\"ownerId\", ownerId);",
 							""
 						],
 						"type": "text/javascript"
@@ -1062,7 +1505,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"storyTitle\": \"This is a new title\",\n\t\"userStory\": \"This is a new description\",\n\t\"businessValue\": 2\n}",
+					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"title\": \"{{taskTitle}}\",\n\t\"description\": \"{{description}}\",\n\t\"priority\": \"{{priority}}\",\n\t\"deadline\": \"{{deadline}}\" \n}",
 					"options": {
 						"raw": {}
 					}
@@ -1121,7 +1564,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"storyTitle\": \"EditThisTask\",\n\t\"userStory\": \"\",\n\t\"businessValue\": 0\n}",
+					"raw": "{\n\t\"statusId\": \"{{toDoID}}\",\n\t\"title\": \"EditThisTask\",\n\t\"description\": \"\",\n\t\"priority\": 0,\n\t\"deadline\": \"\"\n}",
 					"options": {
 						"raw": {}
 					}
@@ -1142,51 +1585,6 @@
 							"value": "94011503-7c22-4e7f-8480-ffe434c4b1ca",
 							"disabled": true
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Archive task ???",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"id": "39918048-ed4e-4f47-8080-deca565e9ef9",
-						"exec": [
-							""
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"id": "d47d32c6-5a97-44c9-b235-9ddce82c4c4a",
-						"exec": [
-							"// No response body, checking status code 200:",
-							"",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "PUT",
-				"header": [],
-				"url": {
-					"raw": "{{baseUrl}}/task/archive/{{archiveThisTaskID}}",
-					"host": [
-						"{{baseUrl}}"
-					],
-					"path": [
-						"task",
-						"archive",
-						"{{archiveThisTaskID}}"
 					]
 				}
 			},
@@ -1696,10 +2094,14 @@
 					"script": {
 						"id": "73e8ff46-d70a-43ae-8ebe-0a74b4c3ac3f",
 						"exec": [
-							"//Check status code is 200 after deleting project",
+							"//Only owner can delete project:",
 							"",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
+							"let response = pm.response.json();",
+							"let errorMessage = \"You are not the project owner\";",
+							"",
+							"pm.test(\"Error message\", function () {",
+							"    // response.errors is a list, using index 0 got get the message",
+							"    pm.expect(response.errors[0]).to.eql(errorMessage);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -1784,6 +2186,41 @@
 					"path": [
 						"auth",
 						"signin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete shared project (owner)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1bf14e07-19da-4d9c-a157-52beeb6f710b",
+						"exec": [
+							"//Check status code is 200 after deleting project",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/project/delete/{{sharedProjectTempId}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"project",
+						"delete",
+						"{{sharedProjectTempId}}"
 					]
 				}
 			},
@@ -1902,6 +2339,25 @@
 					"path": [
 						"auth",
 						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Finish task",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/task/finishtask/{{transferThisTaskID}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"task",
+						"finishtask",
+						"{{transferThisTaskID}}"
 					]
 				}
 			},
