@@ -48,7 +48,7 @@ class SignInTest extends Basetest{
      */
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/login.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/csv/login.csv", numLinesToSkip = 1)
     void invalidLoginWithInvalidCredentials(String username, String password) {
         if (username == null) username = "";
         if (password == null) password = "";

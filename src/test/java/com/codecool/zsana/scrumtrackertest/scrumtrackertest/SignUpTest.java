@@ -53,7 +53,7 @@ class SignUpTest extends Basetest {
      */
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/registration.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/csv/registration.csv", numLinesToSkip = 1)
     void invalidRegistration(String username, String password, String email) {
         if (username == null) username = "";
         if (password == null) password = "";
