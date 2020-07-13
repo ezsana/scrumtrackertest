@@ -246,40 +246,49 @@ Scenario: Unsuccessful to edit task task with less than three character
   Then I get a message to write more the three character for the title.
 
 # 32)
+Scenario: Without clicking on the save button the changed are not saved
 
   Given that I clicked on the edit task button
   When I fill the inputs but don't click on Save button and close the edit window
   Then the changes are not saved.
 
 # 33)
+Scenario: Sprint progress by user story can be seen on page
 
   Given that I'm on my unique project page
   When I have tasks in statuses
   Then I can see the sprint progress by user story circle showing the progress state.
 
 # 34)
+Scenario: Sprint progress by value can be seen on page
 
   Given that I'm on my unique project page
   When I have tasks in statuses
   Then I can see the sprint progress by value circle showing the progress state.
 
 
-Share project tests - unique projects page
+Feature: Share project tests - unique projects page
 
-35)
+# 35)
+Scenario: Successful inviting participant - valid account name
+
   Given that I've clicked on the invite participant button
   When I fill in the input and click on the add participant button
   Then the invited participant's name is seen.
 
-36)
+# 36)
+Scenario: Unsuccessful inviting participant - invalid account name
+
   Given that I've clicked on the invite participant button
   When I fill in the input with invalid user name and click on the add participant button
   Then the invitation is not possible.
 
 
-Logout
+Feature: Logout
 
-37)
+# 37)
+Scenario: Successful logging out
+
   Given that I'm logged in
   When I click on Logout button
   Then a pop-up window shows that logout was successful.
