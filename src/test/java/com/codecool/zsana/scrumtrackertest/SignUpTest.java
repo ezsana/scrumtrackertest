@@ -116,6 +116,7 @@ public class SignUpTest extends Basetest {
         assertTrue(signUp.isElementPresent(signUp.getUserAlreadyExistsMessage()));
     }
 
+
     @After
     public void closeTests() {
         signUp.clickOnElement(signUp.getCloseWindowButton());
