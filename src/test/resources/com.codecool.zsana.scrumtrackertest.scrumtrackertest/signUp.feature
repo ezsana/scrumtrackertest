@@ -48,12 +48,16 @@ Feature: Sign up
 
 
 # 4)
-  Scenario: Invalid registration - valid username / password, blank e-mail
+  Scenario Outline: Invalid registration - valid username / password, blank e-mail
 
     Given I've clicked on Sign up button
     And registration fields can be seen
-    When username / password is valid and e-mail is blank
+    When <username> and <password> is valid and <email> is blank
     Then pop-up shows that all fields are required.
+
+    Examples:
+    | username | password | email |
+    | username | password | null  |
 
 # 5)
   Scenario: Invalid registration - already existing account
