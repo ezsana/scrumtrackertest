@@ -1,4 +1,4 @@
-package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
+package com.codecool.zsana.scrumtrackertest;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

@@ -1,4 +1,4 @@
-package com.codecool.zsana.scrumtrackertest.scrumtrackertest;
+package com.codecool.zsana.scrumtrackertest;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
