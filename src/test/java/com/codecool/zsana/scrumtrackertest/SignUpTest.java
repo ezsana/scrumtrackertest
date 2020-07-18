@@ -1,6 +1,6 @@
 package com.codecool.zsana.scrumtrackertest;
 
-import cucumber.api.java.After;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -32,7 +32,7 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getSignUpSubmitButton());
     }
 
-    @Then("pop-up window shows registration success.")
+    @Then("pop-up window shows registration success")
     public void registrationSuccess() {
         assertTrue(signUp.isElementPresent(signUp.getSuccessfulRegistrationWindowMessage()));
     }
@@ -55,7 +55,7 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getSignUpSubmitButton());
     }
 
-    @Then("pop-up shows that I need to use at least five characters in all fields.")
+    @Then("pop-up shows that I need to use at least five characters in all fields")
     public void fiveCharacterNeeded() {
         assertTrue(signUp.isElementPresent(signUp.getAtLeastFiveCharMessage()));
     }
@@ -74,7 +74,7 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getSignUpSubmitButton());
     }
 
-    @Then("pop-up shows that e-mail is invalid.")
+    @Then("pop-up shows that e-mail is invalid")
     public void invalidEmail() {
         assertTrue(signUp.isElementPresent(signUp.getInvalidEmailMessage()));
     }
@@ -94,7 +94,7 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getSignUpSubmitButton());
     }
 
-    @Then("pop-up shows that all fields are required.")
+    @Then("pop-up shows that all fields are required")
     public void invalidBlankEmail() {
         assertTrue(signUp.isElementPresent(signUp.getBlankEmailMessage()));
     }
@@ -111,13 +111,13 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getSignUpSubmitButton());
     }
 
-    @Then("pop-up shows that the account already exists.")
+    @Then("pop-up shows that the account already exists")
     public void accountAlreadyExists() {
         assertTrue(signUp.isElementPresent(signUp.getUserAlreadyExistsMessage()));
     }
 
 
-    @After
+    @And("finally I close the test.")
     public void closeTests() {
         signUp.clickOnElement(signUp.getCloseWindowButton());
         Basepage.shutDown();

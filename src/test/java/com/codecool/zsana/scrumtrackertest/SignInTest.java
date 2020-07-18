@@ -1,17 +1,25 @@
 package com.codecool.zsana.scrumtrackertest;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SignInTest extends Basetest{
+import static org.junit.Assert.*;
+
+public class SignInTest extends Basetest{
 
     private SignIn signIn;
     private Homepage homepage;
+    private boolean isWelcomeMessageOnPage;
+    private boolean isInvalidLoginMessageDisplayed;
 
-    @BeforeEach
-    void setupTests() {
+    /**
+     * Scenario: Valid sign in
+     */
+
+    @Given("that I've clicked on Sign in button")
+    public void setup() {
         Basepage.setUp();
         Basepage.goToAppUrl();
         signIn = new SignIn();
@@ -19,45 +27,44 @@ class SignInTest extends Basetest{
         signIn.clickOnElement(signIn.getSignInButton());
     }
 
-    @AfterEach
-    void closeTests() {
-        Basepage.shutDown();
-    }
-
-    /**
-     * Valid login
-     */
-
-    @Test
-    void validLogin() {
+    @When("I enter valid username and valid password")
+    public void writeValidLoginCredentials() {
         signIn.writeIntoInputField(signIn.getSignInUsernameInputField(), getUsername2());
         signIn.writeIntoInputField(signIn.getSignInPasswordInputField(), getPassword2());
         signIn.clickOnElement(signIn.getSignInSubmitButton());
-        boolean isWelcomeMessageOnPage = homepage.isElementPresent(homepage.getWelcomeHeading());
+        isWelcomeMessageOnPage = homepage.isElementPresent(homepage.getWelcomeHeading());
         signIn.logoutForTest(homepage);
-        Assertions.assertTrue(isWelcomeMessageOnPage);
+    }
+
+    @Then("I see a welcome message on the screen")
+    public void validLoginSuccessful() {
+        assertTrue(isWelcomeMessageOnPage);
     }
 
     /**
-     * Invalid login:
-     *  invalid username
-     *  invalid password
-     *  empty username
-     *  empty password
-     *  all blank fields
+     * Scenario Outline: Invalid sign in
      */
 
-    @ParameterizedTest
-    @CsvFileSource(resources = "/csv/login.csv", numLinesToSkip = 1)
-    void invalidLoginWithInvalidCredentials(String username, String password) {
-        if (username == null) username = "";
-        if (password == null) password = "";
+    @When("I enter invalid {string}, {string}")
+    public void invalidLoginWithInvalidCredentials(String username, String password) {
+        if (username.equals("null")) username = "";
+        if (password.equals("null")) password = "";
         signIn.writeIntoInputField(signIn.getSignInUsernameInputField(), username);
         signIn.writeIntoInputField(signIn.getSignInPasswordInputField(), password);
         signIn.clickOnElement(signIn.getSignInSubmitButton());
-        boolean isInvalidLoginMessageDisplayed = signIn.isElementPresent(signIn.getInvalidLoginMessage());
+        isInvalidLoginMessageDisplayed = signIn.isElementPresent(signIn.getInvalidLoginMessage());
         signIn.clickOnElement(signIn.getCloseInvalidLoginWindowButton());
-        Assertions.assertTrue(isInvalidLoginMessageDisplayed);
+    }
+
+    @Then("pop-up shows invalid login")
+    public void invalidLogin() {
+        assertTrue(isInvalidLoginMessageDisplayed);
+    }
+
+
+    @And("I close SignIn test.")
+    public void closeTests() {
+        Basepage.shutDown();
     }
 
 }

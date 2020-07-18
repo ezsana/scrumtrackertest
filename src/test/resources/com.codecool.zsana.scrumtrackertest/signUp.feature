@@ -5,7 +5,8 @@ Feature: Sign up
 
     Given I've clicked on Sign Up button
     When I enter username, password and email and click on Sign up button
-    Then pop-up window shows registration success.
+    Then pop-up window shows registration success
+    And finally I close the test.
 
 # 2)
   Scenario Outline: Invalid registration - all blank fields; username / password blank with valid email;
@@ -14,7 +15,8 @@ Feature: Sign up
 
     Given I've clicked on Sign Up button
     When I write "<username>", "<password>", "<email>"
-    Then pop-up shows that I need to use at least five characters in all fields.
+    Then pop-up shows that I need to use at least five characters in all fields
+    And finally I close the test.
 
     Examples:
 
@@ -30,7 +32,8 @@ Feature: Sign up
 
     Given I've clicked on Sign Up button
     When "<username>" and "<password>" valid but "<email>" is not in xxxxx@xxxxx.xxx form
-    Then pop-up shows that e-mail is invalid.
+    Then pop-up shows that e-mail is invalid
+    And finally I close the test.
 
     Examples:
 
@@ -49,7 +52,8 @@ Feature: Sign up
 
     Given I've clicked on Sign Up button
     When "<username>" and "<password>" is valid and "<email>" is blank
-    Then pop-up shows that all fields are required.
+    Then pop-up shows that all fields are required
+    And finally I close the test.
 
     Examples:
     | username | password | email |
@@ -60,4 +64,5 @@ Feature: Sign up
 
     Given I've clicked on Sign Up button
     When I fill fields with already existing account data
-    Then pop-up shows that the account already exists.
+    Then pop-up shows that the account already exists
+    And finally I close the test.
