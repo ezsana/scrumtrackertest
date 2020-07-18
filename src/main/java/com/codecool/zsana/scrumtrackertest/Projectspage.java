@@ -94,8 +94,8 @@ public class Projectspage extends Basepage {
     }
 
     boolean projectIsInArchivedProjectsContainer() {
-        archiveAndUnarchiveProject();
-        showAndHideArchiveProjects.click();
+        //archiveAndUnarchiveProject();
+        //showAndHideArchiveProjects.click();
         WebElement project = getDriver().findElement(By.xpath("//div[@class='project_page']/div[@class='sc-AxhCb ixaEwJ'][4]//div[contains(text(),'ArchiveThisProject')]"));
         return project.isDisplayed();
     }
