@@ -16,7 +16,7 @@ public class SignUpTest extends Basetest {
      */
 
     @Given("I've clicked on Sign Up button")
-    public void iveClickedOnSignUpButton() {
+    public void clickOnSignUpButton() {
         Basepage.setUp();
         signUp = new SignUp();
         Basepage.goToAppUrl();
@@ -24,7 +24,7 @@ public class SignUpTest extends Basetest {
     }
 
     @When("I enter username, password and email and click on Sign up button")
-    public void iEnterUsernamePasswordAndEmailAndClickOnSignUpButton() {
+    public void enterUsernamePasswordAndEmailAndClickOnSignUpButton() {
         signUp.setRegistrationNamePasswordAndEmail();
         signUp.writeIntoInputField(signUp.getSignUpUsernameInputField(), signUp.getSignUpName());
         signUp.writeIntoInputField(signUp.getSignUpPasswordInputField(), signUp.getSignUpPassword());
@@ -33,7 +33,7 @@ public class SignUpTest extends Basetest {
     }
 
     @Then("pop-up window shows registration success.")
-    public void popUpWindowShowsRegistrationSuccess() {
+    public void registrationSuccess() {
         assertTrue(signUp.isElementPresent(signUp.getSuccessfulRegistrationWindowMessage()));
     }
 
@@ -64,7 +64,7 @@ public class SignUpTest extends Basetest {
      * Scenario Outline: Invalid registration - valid username / password, invalid e-mail
      */
 
-    @When("{string} and {string} valid but {string} is not in \"xxxx@xxxxx.xxx\" form")
+    @When("{string} and {string} valid but {string} is not in xxxxx@xxxxx.xxx form")
     public void wrongEmailInput(String username, String password, String email) {
         if (email.equals("spaces@spaces.com")) { email = "      @      .com"; }
         if (email.equals("spaces@spaces.spaces")) { email = "       @       .       "; }

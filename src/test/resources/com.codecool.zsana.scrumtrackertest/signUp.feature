@@ -26,10 +26,10 @@ Feature: Sign up
     | spaces   | password | user@user.com |
 
 # 3)
-  Scenario Outline: Invalid registration - valid <username> / <password>, invalid <email>
+  Scenario Outline: Invalid registration - valid username / password, invalid email
 
     Given I've clicked on Sign Up button
-    When <username> and <password> valid but <email> is not in "xxxxx@xxxxx.xxx" form
+    When "<username>" and "<password>" valid but "<email>" is not in xxxxx@xxxxx.xxx form
     Then pop-up shows that e-mail is invalid.
 
     Examples:
