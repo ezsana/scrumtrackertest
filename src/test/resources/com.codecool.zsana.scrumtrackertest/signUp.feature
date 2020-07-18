@@ -8,12 +8,12 @@ Feature: Sign up
     Then pop-up window shows registration success.
 
 # 2)
-  Scenario Outline: Invalid registration - all blank fields; <username> / <password> blank with valid <email>;
+  Scenario Outline: Invalid registration - all blank fields; username / password blank with valid email;
                     less than 5 characters username / password with valid e-mail; all-spaces username with valid
                     password and e-mail
 
     Given I've clicked on Sign Up button
-    When I write <username>, <password>, <email>
+    When I write "<username>", "<password>", "<email>"
     Then pop-up shows that I need to use at least five characters in all fields.
 
     Examples:
