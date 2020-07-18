@@ -1,15 +1,24 @@
 package com.codecool.zsana.scrumtrackertest;
 
-import org.junit.jupiter.api.*;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+import static org.junit.Assert.*;
+
 public class LogoutTest {
 
-    Homepage homepage;
-    SignIn signIn;
+    private Homepage homepage;
+    private SignIn signIn;
+    private boolean logoutMessage;
 
-    @BeforeAll
-    void setup() {
+    /**
+     * Scenario: Successful logging out
+     */
+
+    @Given("that I'm logged in for logout test")
+    public void setupAndLoginForTest() {
         Basepage.setUp();
         signIn = new SignIn();
         homepage = new Homepage();
@@ -17,20 +26,20 @@ public class LogoutTest {
         signIn.validLoginForTest();
     }
 
-    @AfterAll
-    void close() {
-        Basepage.shutDown();
+    @When("I click on Logout button")
+    public void clickOnLogoutButton() {
+        homepage.clickOnElement(homepage.getLogoutButton());
+        logoutMessage = homepage.isElementPresent(homepage.getLogoutMessage());
     }
 
-    /**
-     * Logout is working
-     */
+    @Then("a pop-up window shows that logout was successful")
+    public void successfulLogout() {
+        assertTrue(logoutMessage);
+    }
 
-    @Test
-    void logoutTest() {
-        homepage.clickOnElement(homepage.getLogoutButton());
-        boolean logoutMessage = homepage.isElementPresent(homepage.getLogoutMessage());
-        Assertions.assertTrue(logoutMessage);
+    @And("I close logout test.")
+    public void closeTest() {
+        Basepage.shutDown();
     }
 
 }
