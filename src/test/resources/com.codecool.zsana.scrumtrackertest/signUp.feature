@@ -45,10 +45,10 @@ Feature: Sign up
 
 
 # 4)
-  Scenario Outline: Invalid registration - valid <username> / <password>, blank <email>
+  Scenario Outline: Invalid registration - valid username / password, blank email
 
     Given I've clicked on Sign Up button
-    When <username> and <password> is valid and <email> is blank
+    When "<username>" and "<password>" is valid and "<email>" is blank
     Then pop-up shows that all fields are required.
 
     Examples:
