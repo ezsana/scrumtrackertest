@@ -175,11 +175,10 @@ Feature: Unique projects page
     | uu         |
 
 # 14)
-  Scenario: Without clicking on the save button the changed are not saved
+  Scenario: Without clicking on the save button the changes are not saved
 
     Given that I'm on my unique project page
-    And that I clicked on the edit task button of "EditThisTask"
-    When I fill the inputs but don't click on Save button and close the edit window
+    When I clicked on the edit task button of "EditThisTask", I fill the inputs but don't click on Save button and close the edit window
     Then the changes are not saved
     And close unique project test.
 
@@ -187,7 +186,6 @@ Feature: Unique projects page
   Scenario: Sprint progress by user story can be seen on page
 
     Given that I'm on my unique project page
-    When I have tasks in statuses
     Then I can see the sprint progress by user story circle showing the progress state
     And close unique project test.
 
@@ -195,6 +193,5 @@ Feature: Unique projects page
   Scenario: Sprint progress by value can be seen on page
 
     Given that I'm on my unique project page
-    When I have tasks in statuses
     Then I can see the sprint progress by value circle showing the progress state
     And close unique project test.

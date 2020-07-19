@@ -16,12 +16,6 @@ import java.util.Collection;
 
 import static org.junit.Assert.*;
 
-import org.openqa.selenium.WebElement;
-import org.opentest4j.AssertionFailedError;
-
-import java.util.Arrays;
-import java.util.Collection;
-
 @FixMethodOrder(MethodSorters.JVM)
 public class UniqueProjectpageTest extends Basetest {
 
@@ -41,6 +35,14 @@ public class UniqueProjectpageTest extends Basetest {
         private String date;
         private WebElement priority;
         private WebElement owner;
+
+        private void generateDataForEditTask() {
+            title = "Edited title";
+            description = "Edited description";
+            date = generateDate();
+            priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
+            owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
+        }
 
 
     private void setup() {
@@ -262,11 +264,7 @@ public class UniqueProjectpageTest extends Basetest {
 
     @When("I click on the Edit task button and make changes to the task: \"EditThisTask\" and click on Save button")
     public void editTask() {
-        title = "Edited title";
-        description = "Edited description";
-        date = generateDate();
-        priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
-        owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
+        generateDataForEditTask();
         uniqueProjectpage.editTask(title, description, date, priority, owner, true);
     }
 
@@ -319,17 +317,17 @@ public class UniqueProjectpageTest extends Basetest {
     }
 
     /**
-     * Edit task not happening when changes are not saved
+     * Scenario: Without clicking on the save button the changes are not saved
      */
 
-    @TestFactory
-    public Collection<DynamicTest> editingTaskWithoutSavingIsNotPossible() {
-        String title = "Edited title";
-        String description = "Edited description";
-        String date = generateDate();
-        WebElement priority = uniqueProjectpage.getEditThisTaskChooseThreeOption(); // 3
-        WebElement owner = uniqueProjectpage.getEditThisTaskChooseOwnerFromList(); // zsana6
+    @When("I clicked on the edit task button of \"EditThisTask\", I fill the inputs but don't click on Save button and close the edit window")
+    public void editingTaskWithoutSaving() {
+        generateDataForEditTask();
         uniqueProjectpage.editTask(title, description, date, priority, owner, false);
+    }
+
+    @Then("the changes are not saved")
+    public Collection<DynamicTest> changesNotSaved() {
         uniqueProjectpage.refreshPage();
 
         // Open edit task window again
@@ -353,20 +351,20 @@ public class UniqueProjectpageTest extends Basetest {
     }
 
     /**
-     * Sprint progress by user story
+     * Scenario: Sprint progress by user story can be seen on page
      * All tasks are in To Do so the progress circle should be red and 100%
      */
 
-
+    @Then("I can see the sprint progress by user story circle showing the progress state")
     public void sprintProgressByUserStory() {
         assertTrue(uniqueProjectpage.getUserStoryProgressChart().getText().contains("100 %"));
     }
 
     /**
-     * Sprint progress by value distribution
+     * Scenario: Sprint progress by value can be seen on page
      */
 
-
+    @Then("I can see the sprint progress by value circle showing the progress state")
     public void sprintProgressByValue() {
         // Change EditThisTask value to 3
         uniqueProjectpage.editValue();
