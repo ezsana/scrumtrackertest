@@ -1,12 +1,18 @@
 Feature: Unique projects page
 
 # 1)
-  Scenario: Three built-in statuses can be seen on page
+  Scenario Outline: Three built-in statuses can be seen on page
 
-    Given that I've just created a new project
+    Given that I've just created a new project: "<project>"
     When I click on the newly created project
-    Then the page of this project shows up
-    And I can see three statuses: To Do; In Progress; Done
+    Then the page of this project shows up with three statuses: To Do; In Progress; Done
+    Then I delete the project created for the test: "<project>"
+    And close unique project test.
+
+    Examples:
+
+    |          project           |
+    | CheckStatusesOfThisProject |
 
 # 2)
   Scenario: Successful adding new status

@@ -1,25 +1,40 @@
 package com.codecool.zsana.scrumtrackertest;
 
 import org.junit.FixMethodOrder;
-import org.junit.jupiter.api.*;
 import org.junit.runners.MethodSorters;
+import org.openqa.selenium.WebElement;
+
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.junit.Assert.*;
+
 import org.openqa.selenium.WebElement;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @FixMethodOrder(MethodSorters.JVM)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UniqueProjectpageTest extends Basetest {
 
     private Homepage homepage;
     private SignIn signIn;
     private Projectspage projectspage;
     private UniqueProjectpage uniqueProjectpage;
+    private WebElement newProject;
 
-    @BeforeAll
+    /**
+     * Scenario: Three built-in statuses can be seen on page
+     */
+
+
     void setup() {
         Basepage.setUp();
         signIn = new SignIn();
@@ -32,25 +47,44 @@ class UniqueProjectpageTest extends Basetest {
         projectspage.clickOnElement(projectspage.getShareThisProjectTitle());
     }
 
-    @AfterAll
-    void close() {
-        signIn.logoutForTest(homepage);
-        Homepage.shutDown();
+    @Given("that I've just created a new project: {string}")
+    public void createProject(String projectName) {
+        Basepage.setUp();
+        signIn = new SignIn();
+        homepage = new Homepage();
+        projectspage = new Projectspage();
+        uniqueProjectpage = new UniqueProjectpage();
+        Basepage.goToAppUrl();
+        signIn.validLoginForTest();
+        homepage.clickOnElement(homepage.getProjectsButton());
+        newProject = projectspage.createNewProject(projectName);
     }
 
-    /**
-     * After clicking on BaseProjectForTest I can see all three basic statuses:
-     *  To Do
-     *  In Progress
-     *  Done
-    */
+    @When("I click on the newly created project")
+    public void openProject() {
+        newProject.click();
+    }
 
+    @Then("the page of this project shows up with three statuses: To Do; In Progress; Done")
     @TestFactory
-    Collection<DynamicTest> freshlyCreatedProjectPageTest() {
+    public Collection<DynamicTest> freshlyCreatedProjectPageTest() {
         return Arrays.asList(DynamicTest.dynamicTest("To Do", () -> assertTrue(uniqueProjectpage.isElementPresent(uniqueProjectpage.getTodoContainer()))),
                 DynamicTest.dynamicTest("In Progress", () -> assertTrue(uniqueProjectpage.isElementPresent(uniqueProjectpage.getInProgressContainer()))),
                 DynamicTest.dynamicTest("Done", () -> assertTrue(uniqueProjectpage.isElementPresent(uniqueProjectpage.getDoneContainer()))));
     }
+
+    @Then("I delete the project created for the test: {string}")
+    public void deleteProject(String projectName) {
+        projectspage.deleteProject(projectName);
+    }
+
+    @And("close unique project test.")
+    public void close() {
+        signIn.logoutForTest(homepage);
+        Homepage.shutDown();
+    }
+
+
 
 
     /**
@@ -58,11 +92,11 @@ class UniqueProjectpageTest extends Basetest {
      *  New status: On Hold
     */
 
-    @Test
+
     void addNewStatusIsWorkingTest() {
         uniqueProjectpage.addNewStatus("On Hold");
         WebElement status = uniqueProjectpage.searchElementByText("On Hold");
-        Assertions.assertTrue(status.isDisplayed());
+        assertTrue(status.isDisplayed());
     }
 
     /**
@@ -70,23 +104,22 @@ class UniqueProjectpageTest extends Basetest {
      *  Deleted status: On Hold
     */
 
-    @Test
     void statusDeleteIsWorkingTest() {
         WebElement status = uniqueProjectpage.searchElementByText("On Hold");
         uniqueProjectpage.deleteStatus(status);
-        Assertions.assertTrue(uniqueProjectpage.elementIsNotPresent(status));
+        assertTrue(uniqueProjectpage.elementIsNotPresent(status));
     }
 
     /**
      * Add new status with less than three character is not possible
     */
 
-    @Test
+
     void addNewStatusWithLessThanThreeChar() {
         uniqueProjectpage.addNewStatus("ne");
         String message = uniqueProjectpage.getPopUpMessage();
         uniqueProjectpage.acceptPopUpAlert();
-        Assertions.assertEquals("add name (minimum 3 character) to your status", message);
+        assertEquals("add name (minimum 3 character) to your status", message);
     }
 
     /**
@@ -94,11 +127,11 @@ class UniqueProjectpageTest extends Basetest {
      *  Task name: AddAndDeleteThisTask
     */
 
-    @Test
+
     void addNewTaskIsWorkingTest() {
         uniqueProjectpage.addNewTask("AddAndDeleteThisTask", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
         WebElement task = uniqueProjectpage.searchElementByText("AddAndDeleteThisTask");
-        Assertions.assertTrue(task.isDisplayed());
+        assertTrue(task.isDisplayed());
     }
 
     /**
@@ -106,55 +139,55 @@ class UniqueProjectpageTest extends Basetest {
      *  task to delete: AddAndDeleteThisTask
      */
 
-    @Test
+
     void deleteTaskIsWorkingTest() {
         WebElement task = uniqueProjectpage.searchElementByText("AddAndDeleteThisTask");
         uniqueProjectpage.deleteTask(task);
-        Assertions.assertTrue(uniqueProjectpage.elementIsNotPresent(task));
+        assertTrue(uniqueProjectpage.elementIsNotPresent(task));
     }
 
     /**
      * Add new task with less than three character is not possible
     */
 
-    @Test
+
     void addNewTaskWithLessThanThreeChar() {
         uniqueProjectpage.addNewTask("ne", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
         boolean errorMessage = uniqueProjectpage.isElementPresent(uniqueProjectpage.getErrorMessage());
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getErrorWindowCloseButton());
-        Assertions.assertTrue(errorMessage);
+        assertTrue(errorMessage);
     }
 
     /**
      * Send the project details by e-mail is working
      */
 
-    @Test
+
     void sendProjectDetailsByEmail() {
         uniqueProjectpage.sendProjectByEmail("zsana6@zsana6.com");
         boolean successfulEmailSending =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getMessageOfSuccessfulEmailSending());
         uniqueProjectpage.getCloseMessageOfSuccessfulEmail().click();
-        Assertions.assertTrue(successfulEmailSending);
+        assertTrue(successfulEmailSending);
     }
 
     /**
      * Send project by e-mail is not possible with invalid e-mail address
      */
 
-    @Test
+
     void sendEmailWithInvalidEmailAddress() {
         uniqueProjectpage.sendProjectByEmail("invalid address");
         boolean invalidEmail =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getInvalidEmailMessage());
         uniqueProjectpage.getInvalidEmailErrorWindowCloseButton().click();
         uniqueProjectpage.getCloseSendEmailWindow().click();
-        Assertions.assertTrue(invalidEmail);
+        assertTrue(invalidEmail);
     }
 
     /**
      * Limit the In Progress task count is working
      */
 
-    @Test
+
     void limitInProgressTaskCount() {
         uniqueProjectpage.setLimitInProgress(2);
         boolean success = uniqueProjectpage.isElementPresent(uniqueProjectpage.getLimitInProgressSuccessfulMessage());
@@ -162,7 +195,7 @@ class UniqueProjectpageTest extends Basetest {
         // Set limit to 0 for later test executions
         uniqueProjectpage.setLimitInProgress(0);
         uniqueProjectpage.getLimitInProgressSuccessfulButton().click();
-        Assertions.assertTrue(success);
+        assertTrue(success);
     }
 
     /**
@@ -170,13 +203,13 @@ class UniqueProjectpageTest extends Basetest {
      *  Task: TransferThisTask from To Do to In Progress (and back)
      */
 
-    @Test
+
     void transferTaskWorking() {
         uniqueProjectpage.transferTask(uniqueProjectpage.getTransferThisTask(), uniqueProjectpage.getInProgressContainer());
         boolean success = uniqueProjectpage.taskIsTransferred("In Progress");
         // Task moved back to original place
         uniqueProjectpage.transferTask(uniqueProjectpage.getTransferThisTask(), uniqueProjectpage.getTodoContainer());
-        Assertions.assertTrue(success);
+        assertTrue(success);
     }
 
     /**
@@ -220,14 +253,14 @@ class UniqueProjectpageTest extends Basetest {
      * This test fails at the moment
      */
 
-    @Test
+
     void taskTitleMinimumThreeChar() {
         String title = "uu";
         uniqueProjectpage.editTaskTitle(title, uniqueProjectpage.getEditThisTaskEditButton());
         boolean titleChange = uniqueProjectpage.searchElementByText(title).isDisplayed(); // Have the title changed?
         // Get back the original title - temporary solution as this test should pass in future development
         uniqueProjectpage.editTaskTitle("EditThisTask", uniqueProjectpage.getLessThanThreeCharTaskEditButton());
-        Assertions.assertFalse(titleChange);
+        assertFalse(titleChange);
     }
 
     /**
@@ -269,16 +302,16 @@ class UniqueProjectpageTest extends Basetest {
      * All tasks are in To Do so the progress circle should be red and 100%
      */
 
-    @Test
+
     void sprintProgressByUserStory() {
-        Assertions.assertTrue(uniqueProjectpage.getUserStoryProgressChart().getText().contains("100 %"));
+        assertTrue(uniqueProjectpage.getUserStoryProgressChart().getText().contains("100 %"));
     }
 
     /**
      * Sprint progress by value distribution
      */
 
-    @Test
+
     void sprintProgressByValue() {
         // Change EditThisTask value to 3
         uniqueProjectpage.editValue();
@@ -288,6 +321,6 @@ class UniqueProjectpageTest extends Basetest {
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskDeletebutton());
         uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
         // Assert value
-        Assertions.assertTrue(valueIsThree);
+       assertTrue(valueIsThree);
     }
 }
