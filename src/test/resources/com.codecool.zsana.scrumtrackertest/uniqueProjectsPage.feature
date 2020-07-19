@@ -26,6 +26,7 @@ Feature: Unique projects page
 
     | newStatus |
     | On Hold   |
+    | new       |
 
 # 3)
   Scenario Outline: Successful deleting status
@@ -39,46 +40,79 @@ Feature: Unique projects page
 
     | status  |
     | On Hold |
+    | new     |
 
 # 4)
-  Scenario: Unsuccessful adding new status with less than three character
+  Scenario Outline: Unsuccessful adding new status with less than three character
 
     Given that I'm on my unique project page
-    When I fill in the "Add new status" field with less than three character
+    When I fill in the "Add new status" field with less than three character: "<invalidStatus>"
     Then a pop-up shows that I have to write more the three letters to create a new status
     And close unique project test.
 
+    Examples:
+
+    | invalidStatus |
+    | ne            |
+    | n             |
+    | null          |
+
 # 5)
-  Scenario: Successful adding new task
+  Scenario Outline: Successful adding new task
 
     Given that I'm on my unique project page
-    When I fill in the "Add new task" field and click on Save button
-    Then I can see the new task in the To Do container on the page
+    When I fill in the "Add new task" field: "<newTaskName>" and click on Save button
+    Then I can see the new task: "<newTaskName>" in the To Do container on the page
     And close unique project test.
 
-# 6)
-  Scenario: Successful deleting task
+    Examples:
 
-    Given that I have a task
+    |     newTaskName      |
+    | AddAndDeleteThisTask |
+    | tsk                  |
+
+# 6)
+  Scenario Outline: Successful deleting task
+
+    Given that I'm on my unique project page
+    And that I have a task: "<taskName>"
     When I click on the task delete button
     Then the task is deleted
     And close unique project test.
 
+    Examples:
+
+    |       taskName       |
+    | AddAndDeleteThisTask |
+    | tsk                  |
+
 # 7)
-  Scenario: Unsuccessful adding new task with less than three characters
+  Scenario Outline: Unsuccessful adding new task with less than three characters
 
     Given that I'm on my unique project page
-    When I fill in the "Add new task" field with less than three character
+    When I fill in the "Add new task" field with less than three character: "<invalidTaskName>"
     Then a pop-up shows that I have to write more the three letters to create a new task
     And close unique project test.
 
+    Examples:
+
+    | invalidTaskName |
+    | ts              |
+    | t               |
+    | null            |
+
 # 8)
-  Scenario: successful sending project details via e-mail - valid e-mail address
+  Scenario Outline: successful sending project details via e-mail - valid e-mail address
 
     Given that I'm on my unique project page
-    When I click on send e-mail button and write valid e-mail address into the input field
+    When I click on send e-mail button and write "<validEmail>" into the input field
     Then I get a message that the e-mail is sent
     And close unique project test.
+
+    Examples:
+
+    |   validEmail    |
+    | zsana6@zsana6.com |
 
 # 9)
   Scenario: unsuccessful sending project details via e-mail - invalid e-mail address

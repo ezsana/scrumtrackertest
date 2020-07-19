@@ -30,6 +30,7 @@ public class UniqueProjectpageTest extends Basetest {
     private UniqueProjectpage uniqueProjectpage;
     private WebElement newProject;
     private WebElement newStatusForTest;
+    private WebElement addAndDeleteTask;
 
     private void setup() {
         Basepage.setUp();
@@ -107,68 +108,85 @@ public class UniqueProjectpageTest extends Basetest {
         assertTrue(uniqueProjectpage.elementIsNotPresent(newStatusForTest));
     }
 
-
-
-
-
-
-
-
     /**
-     * Add new status with less than three character is not possible
+     * Scenario Outline: Unsuccessful adding new status with less than three character
     */
 
+    @When("I fill in the \"Add new status\" field with less than three character: {string}")
+    public void addNewStatusWithLessThanThreeChar(String statusName) {
+        if (statusName.equals("null")) { statusName = ""; }
+        uniqueProjectpage.addNewStatus(statusName);
+    }
 
-    void addNewStatusWithLessThanThreeChar() {
-        uniqueProjectpage.addNewStatus("ne");
+    @Then("a pop-up shows that I have to write more the three letters to create a new status")
+    public void addNewStatusWithLessThanThreeCharFails() {
         String message = uniqueProjectpage.getPopUpMessage();
         uniqueProjectpage.acceptPopUpAlert();
         assertEquals("add name (minimum 3 character) to your status", message);
     }
 
     /**
-     * Add new task in To Do container
-     *  Task name: AddAndDeleteThisTask
+     * Scenario Outline: Successful adding new task
     */
 
+    @When("I fill in the \"Add new task\" field: {string} and click on Save button")
+    public void addNewTask(String newTaskName) {
+        uniqueProjectpage.addNewTask(newTaskName, uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
+    }
 
-    void addNewTaskIsWorkingTest() {
-        uniqueProjectpage.addNewTask("AddAndDeleteThisTask", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
-        WebElement task = uniqueProjectpage.searchElementByText("AddAndDeleteThisTask");
+    @Then("I can see the new task: {string} in the To Do container on the page")
+    public void newTaskNameIsSeen(String newTaskName) {
+        WebElement task = uniqueProjectpage.searchElementByText(newTaskName);
         assertTrue(task.isDisplayed());
     }
 
     /**
-     * Delete task is working
-     *  task to delete: AddAndDeleteThisTask
+     * Scenario Outline: Successful deleting task
      */
 
+    @And("that I have a task: {string}")
+    public void iHaveTask(String taskName) {
+        addAndDeleteTask = uniqueProjectpage.searchElementByText(taskName);
+    }
 
-    void deleteTaskIsWorkingTest() {
-        WebElement task = uniqueProjectpage.searchElementByText("AddAndDeleteThisTask");
-        uniqueProjectpage.deleteTask(task);
-        assertTrue(uniqueProjectpage.elementIsNotPresent(task));
+    @When("I click on the task delete button")
+            public void deleteTask() {
+        uniqueProjectpage.deleteTask(addAndDeleteTask);
+    }
+
+    @Then("the task is deleted")
+    public void taskIsDeleted() {
+        assertTrue(uniqueProjectpage.elementIsNotPresent(addAndDeleteTask));
     }
 
     /**
      * Add new task with less than three character is not possible
     */
 
+    @When("I fill in the \"Add new task\" field with less than three character: {string}")
+    public void addNewTaskWithLessThanThreeChar(String invalidName) {
+        if (invalidName.equals("null")) { invalidName = ""; }
+        uniqueProjectpage.addNewTask(invalidName, uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
+    }
 
-    void addNewTaskWithLessThanThreeChar() {
-        uniqueProjectpage.addNewTask("ne", uniqueProjectpage.getAddNewTaskButtonInDoneStatus(), uniqueProjectpage.getAddNewTaskInputInDoneStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInDoneStatus());
+    @Then("a pop-up shows that I have to write more the three letters to create a new task")
+    public void addNewTaskWithLessThanThreeCharNotPossible() {
         boolean errorMessage = uniqueProjectpage.isElementPresent(uniqueProjectpage.getErrorMessage());
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getErrorWindowCloseButton());
         assertTrue(errorMessage);
     }
 
     /**
-     * Send the project details by e-mail is working
+     * Scenario Outline: successful sending project details via e-mail - valid e-mail address
      */
 
+    @When("I click on send e-mail button and write {string} into the input field")
+    public void sendProjectDetailsByEmail(String email) {
+        uniqueProjectpage.sendProjectByEmail(email);
+    }
 
-    void sendProjectDetailsByEmail() {
-        uniqueProjectpage.sendProjectByEmail("zsana6@zsana6.com");
+    @Then("I get a message that the e-mail is sent")
+    public void sendProjectDetailsByEmailIsSuccessful() {
         boolean successfulEmailSending =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getMessageOfSuccessfulEmailSending());
         uniqueProjectpage.getCloseMessageOfSuccessfulEmail().click();
         assertTrue(successfulEmailSending);
@@ -178,8 +196,7 @@ public class UniqueProjectpageTest extends Basetest {
      * Send project by e-mail is not possible with invalid e-mail address
      */
 
-
-    void sendEmailWithInvalidEmailAddress() {
+    public void sendEmailWithInvalidEmailAddress() {
         uniqueProjectpage.sendProjectByEmail("invalid address");
         boolean invalidEmail =  uniqueProjectpage.isElementPresent(uniqueProjectpage.getInvalidEmailMessage());
         uniqueProjectpage.getInvalidEmailErrorWindowCloseButton().click();
@@ -192,7 +209,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
 
-    void limitInProgressTaskCount() {
+    public void limitInProgressTaskCount() {
         uniqueProjectpage.setLimitInProgress(2);
         boolean success = uniqueProjectpage.isElementPresent(uniqueProjectpage.getLimitInProgressSuccessfulMessage());
         uniqueProjectpage.getLimitInProgressSuccessfulButton().click();
@@ -208,7 +225,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
 
-    void transferTaskWorking() {
+    public void transferTaskWorking() {
         uniqueProjectpage.transferTask(uniqueProjectpage.getTransferThisTask(), uniqueProjectpage.getInProgressContainer());
         boolean success = uniqueProjectpage.taskIsTransferred("In Progress");
         // Task moved back to original place
@@ -221,7 +238,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
     @TestFactory
-    Collection<DynamicTest> editTaskWorking() {
+    public Collection<DynamicTest> editTaskWorking() {
         String title = "Edited title";
         String description = "Edited description";
         String date = generateDate();
@@ -258,7 +275,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
 
-    void taskTitleMinimumThreeChar() {
+    public void taskTitleMinimumThreeChar() {
         String title = "uu";
         uniqueProjectpage.editTaskTitle(title, uniqueProjectpage.getEditThisTaskEditButton());
         boolean titleChange = uniqueProjectpage.searchElementByText(title).isDisplayed(); // Have the title changed?
@@ -272,7 +289,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
     @TestFactory
-    Collection<DynamicTest> editingTaskWithoutSavingIsNotPossible() {
+    public Collection<DynamicTest> editingTaskWithoutSavingIsNotPossible() {
         String title = "Edited title";
         String description = "Edited description";
         String date = generateDate();
@@ -307,7 +324,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
 
-    void sprintProgressByUserStory() {
+    public void sprintProgressByUserStory() {
         assertTrue(uniqueProjectpage.getUserStoryProgressChart().getText().contains("100 %"));
     }
 
@@ -316,7 +333,7 @@ public class UniqueProjectpageTest extends Basetest {
      */
 
 
-    void sprintProgressByValue() {
+    public void sprintProgressByValue() {
         // Change EditThisTask value to 3
         uniqueProjectpage.editValue();
         // Check if value is three total
