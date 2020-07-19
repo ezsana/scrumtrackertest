@@ -251,6 +251,7 @@ public class UniqueProjectpage extends Basepage {
         WebElement grandParent = status.findElement(By.xpath("./..")).findElement(By.xpath("./.."));
         WebElement bin = grandParent.findElement(By.className("status_tool_container")).findElement(By.xpath("./span[@aria-label='delete']"));
         bin.click();
+        getDriver().navigate().refresh();
         getWait().until(ExpectedConditions.invisibilityOf(status));
     }
 

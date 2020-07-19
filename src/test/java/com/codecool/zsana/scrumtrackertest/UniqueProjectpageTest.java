@@ -22,41 +22,33 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @FixMethodOrder(MethodSorters.JVM)
-class UniqueProjectpageTest extends Basetest {
+public class UniqueProjectpageTest extends Basetest {
 
     private Homepage homepage;
     private SignIn signIn;
     private Projectspage projectspage;
     private UniqueProjectpage uniqueProjectpage;
     private WebElement newProject;
+    private WebElement newStatusForTest;
+
+    private void setup() {
+        Basepage.setUp();
+        signIn = new SignIn();
+        homepage = new Homepage();
+        projectspage = new Projectspage();
+        uniqueProjectpage = new UniqueProjectpage();
+        Basepage.goToAppUrl();
+        signIn.validLoginForTest();
+        homepage.clickOnElement(homepage.getProjectsButton());
+    }
 
     /**
      * Scenario: Three built-in statuses can be seen on page
      */
 
-
-    void setup() {
-        Basepage.setUp();
-        signIn = new SignIn();
-        homepage = new Homepage();
-        projectspage = new Projectspage();
-        uniqueProjectpage = new UniqueProjectpage();
-        Basepage.goToAppUrl();
-        signIn.validLoginForTest();
-        homepage.clickOnElement(homepage.getProjectsButton());
-        projectspage.clickOnElement(projectspage.getShareThisProjectTitle());
-    }
-
     @Given("that I've just created a new project: {string}")
     public void createProject(String projectName) {
-        Basepage.setUp();
-        signIn = new SignIn();
-        homepage = new Homepage();
-        projectspage = new Projectspage();
-        uniqueProjectpage = new UniqueProjectpage();
-        Basepage.goToAppUrl();
-        signIn.validLoginForTest();
-        homepage.clickOnElement(homepage.getProjectsButton());
+        setup();
         newProject = projectspage.createNewProject(projectName);
     }
 
@@ -75,40 +67,52 @@ class UniqueProjectpageTest extends Basetest {
 
     @Then("I delete the project created for the test: {string}")
     public void deleteProject(String projectName) {
+        homepage.getProjectsButton().click();
         projectspage.deleteProject(projectName);
     }
 
-    @And("close unique project test.")
-    public void close() {
-        signIn.logoutForTest(homepage);
-        Homepage.shutDown();
-    }
-
-
-
-
     /**
-     * Add new status is working
-     *  New status: On Hold
+     * Scenario Outline: Successful adding new status
     */
 
+    @Given("that I'm on my unique project page")
+    public void goToUniqueProjectPage() {
+        setup();
+        projectspage.clickOnElement(projectspage.getBaseProjectForTestTitle());
+    }
 
-    void addNewStatusIsWorkingTest() {
-        uniqueProjectpage.addNewStatus("On Hold");
-        WebElement status = uniqueProjectpage.searchElementByText("On Hold");
+    @When("I fill in the \"Add new status\" field: {string} and click Save button")
+    public void addNewStatus(String newStatus) {
+        uniqueProjectpage.addNewStatus(newStatus);
+    }
+
+    @Then("I can see the new status: {string} on the page")
+    public void addNewStatusIsWorking(String newStatus) {
+        WebElement status = uniqueProjectpage.searchElementByText(newStatus);
         assertTrue(status.isDisplayed());
     }
 
     /**
-     * Delete status is working
-     *  Deleted status: On Hold
+     * Scenario: Successful deleting status
     */
 
-    void statusDeleteIsWorkingTest() {
-        WebElement status = uniqueProjectpage.searchElementByText("On Hold");
-        uniqueProjectpage.deleteStatus(status);
-        assertTrue(uniqueProjectpage.elementIsNotPresent(status));
+    @When("I click on the status: {string} delete button")
+    public void statusDeleteIsWorkingTest(String statusName) {
+        newStatusForTest = uniqueProjectpage.searchElementByText(statusName);
+        uniqueProjectpage.deleteStatus(newStatusForTest);
     }
+
+    @Then("status is deleted")
+    public void statusIsNotPresent() {
+        assertTrue(uniqueProjectpage.elementIsNotPresent(newStatusForTest));
+    }
+
+
+
+
+
+
+
 
     /**
      * Add new status with less than three character is not possible
@@ -322,5 +326,12 @@ class UniqueProjectpageTest extends Basetest {
         uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
         // Assert value
        assertTrue(valueIsThree);
+    }
+
+
+    @And("close unique project test.")
+    public void close() {
+        signIn.logoutForTest(homepage);
+        Homepage.shutDown();
     }
 }
