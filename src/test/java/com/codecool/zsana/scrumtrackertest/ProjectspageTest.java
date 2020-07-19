@@ -22,6 +22,9 @@ public class ProjectspageTest {
     private Projectspage projectspage;
     private boolean errorMessageLessThanThreeChar;
     private WebElement projectToDelete;
+    private String sharedProjectTitle;
+    private String sharedProjectText;
+    private boolean sharedProjectDeleteAlertDisplay;
 
     /**
      * Scenario: all my projects can be seen on page
@@ -125,35 +128,52 @@ public class ProjectspageTest {
     }
 
     /**
-     * Unarchive project test
+     * Scenario: Successful unarchive project
      */
 
-    @Order(6)
-    void unarchiveProjectWorking() {
+    //@Order(6)
+    @When("I click on the show archive projects button and click on archive project button")
+    public void unarchiveProject() {
+        projectspage.getShowAndHideArchiveProjects().click();
+        projectspage.archiveAndUnarchiveProject();
+    }
+
+    @Then("the archived project is replaced to the original container")
+    public void projectIsUnarchived() {
         assertTrue(projectspage.projectIsUnarchived());
     }
 
     /**
-     * Shared projects can be seen on page
+     * Scenario: Shared projects can be seen on page
      */
 
-    @Order(7)
-    void projectIsAvailableInParticipantAccount() {
-        String sharedProjectTitle = "zsanaProjectShare";
-        String projectText = projectspage.getSharedProjectsContainer().getText();
-        assertEquals(sharedProjectTitle, projectText);
+    //@Order(7)
+    @When("I scroll down to \"Projects I participated in\"")
+    public void getSharedProjectTitle() {
+        sharedProjectTitle = "zsanaProjectShare";
+        sharedProjectText = projectspage.getSharedProjectsContainer().getText();
+    }
+
+    @Then("I can see projects which are shared with me")
+    public void sharedProjectIsSeen() {
+        assertEquals(sharedProjectTitle, sharedProjectText);
     }
 
     /**
-     * Shared project is not possible to delete
+     * Scenario: To delete shared project is not possible if I'm not the owner of the project
      */
 
-    @Order(8)
-    void deletionNotPossibleInParticipantAccount() {
+    //@Order(8)
+    @When("I click on delete button in shared project")
+    public void tryToDeleteSharedProject() {
         projectspage.clickOnElement(projectspage.getDeleteSharedProjectButton());
-        boolean alertDisplay = projectspage.getSharedProjectDeleteErrorMessage().isDisplayed();
+        sharedProjectDeleteAlertDisplay = projectspage.getSharedProjectDeleteErrorMessage().isDisplayed();
         projectspage.clickOnElement(projectspage.getSharedProjectDeleteErrorMessageCloseButton());
-        assertTrue(alertDisplay);
+    }
+
+    @Then("I'm not able to delete it")
+    public void sharedProjectDeletionNotPossible() {
+        assertTrue(sharedProjectDeleteAlertDisplay);
     }
 
 
