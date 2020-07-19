@@ -22,7 +22,6 @@ public class ProjectspageTest {
     private Projectspage projectspage;
     private boolean errorMessageLessThanThreeChar;
     private WebElement projectToDelete;
-    private String sharedProjectTitle;
     private String sharedProjectText;
     private boolean sharedProjectDeleteAlertDisplay;
 
@@ -68,9 +67,9 @@ public class ProjectspageTest {
     }
 
     //@Order(2)
-    @When("I fill in the \"Create Project\" field with less than three character")
-    public void createProjectNotPossibleWithLessThanThreeChar() {
-        projectspage.createNewProjectWithInvalidName("pr");
+    @When("I fill in the \"Create Project\" field with less than three character: {string}")
+    public void createProjectNotPossibleWithLessThanThreeChar(String projectName) {
+        projectspage.createNewProjectWithInvalidName(projectName);
         errorMessageLessThanThreeChar = projectspage.isElementPresent(projectspage.getTitleLessThanThreeCharErrorMessage());
         projectspage.getCloseErrorWindow().click();
     }
@@ -85,14 +84,14 @@ public class ProjectspageTest {
      */
 
     //@Order(3)
-    @When("I write in the \"create new project\" field and click on \"create project\" button")
-    public void newProjectIsDisplayedOnPage() {
-        projectspage.createNewProject("AddAndDeleteThisProject");
+    @When("I write in the \"create new project\" field: {string} and click on \"create project\" button")
+    public void newProjectIsDisplayedOnPage(String projectName) {
+        projectspage.createNewProject(projectName);
     }
 
-    @Then("I can see my new project")
-    public void newProjectIsShown() {
-        assertTrue(projectspage.isNewProjectDisplayed("AddAndDeleteThisProject"));
+    @Then("I can see my new project: {string}")
+    public void newProjectIsShown(String projectName) {
+        assertTrue(projectspage.isNewProjectDisplayed(projectName));
     }
 
     /**
@@ -100,10 +99,10 @@ public class ProjectspageTest {
      */
 
     //@Order(4)
-    @When("I click on the delete project button")
-    public void deleteProject() {
-        projectToDelete = projectspage.searchElementByText("AddAndDeleteThisProject");
-        projectspage.deleteProject("AddAndDeleteThisProject");
+    @When("I click on the {string} delete project button")
+    public void deleteProject(String projectName) {
+        projectToDelete = projectspage.searchElementByText(projectName);
+        projectspage.deleteProject(projectName);
     }
 
     @Then("the project is deleted")
@@ -150,13 +149,12 @@ public class ProjectspageTest {
     //@Order(7)
     @When("I scroll down to \"Projects I participated in\"")
     public void getSharedProjectTitle() {
-        sharedProjectTitle = "zsanaProjectShare";
         sharedProjectText = projectspage.getSharedProjectsContainer().getText();
     }
 
-    @Then("I can see projects which are shared with me")
-    public void sharedProjectIsSeen() {
-        assertEquals(sharedProjectTitle, sharedProjectText);
+    @Then("I can see projects which are shared with me: {string}")
+    public void sharedProjectIsSeen(String sharedProject) {
+        assertEquals(sharedProject, sharedProjectText);
     }
 
     /**
