@@ -1,12 +1,22 @@
 package com.codecool.zsana.scrumtrackertest;
 
-import org.junit.jupiter.api.*;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestFactory;
+
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.junit.Assert.*;
 
 /**
  * To make this test reusable, the ShareThisProject is deleted and created again.
  */
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class ShareProjectTest extends Basetest {
 
     private Homepage homepage;
@@ -14,8 +24,12 @@ public class ShareProjectTest extends Basetest {
     private Projectspage projectspage;
     private UniqueProjectpage uniqueProjectpage;
 
-    @BeforeAll
-    void setup() {
+    /**
+     * Scenario Outline: Successful inviting participant - valid account name
+     */
+
+    @Given("that I've clicked on the invite participant button")
+    public void setupAndClickOnInvitationButton() {
         Basepage.setUp();
         signIn = new SignIn();
         homepage = new Homepage();
@@ -27,8 +41,39 @@ public class ShareProjectTest extends Basetest {
         projectspage.clickOnElement(projectspage.getShareThisProjectTitle());
     }
 
-    @AfterAll
-    void close() {
+    @When("I fill in the {string} and click on the add participant button")
+    public void inviteParticipant(String participant) {
+        uniqueProjectpage.inviteParticipant(participant);
+    }
+
+    @Then("the invited participant's name is seen: {string}")
+    public void invitationValid(String participant) {
+        assertTrue(uniqueProjectpage.isParticipantInvited(participant)); // I close the window here
+    }
+
+    @And("I close the share project test no 1.")
+    public void closeInvitationValidTest() {
+        signIn.logoutForTest(homepage);
+        Homepage.shutDown();
+    }
+
+    /**
+     * Scenario Outline: Unsuccessful inviting participant - invalid account name
+     */
+
+    @When("I fill in the input with invalid user name: {string} and click on the add participant button")
+    public void invitationWithNonExistingUser(String invalidParticipant) {
+        uniqueProjectpage.inviteParticipant(invalidParticipant);
+    }
+
+    @Then("the invitation is not possible with the {string}")
+    public void invitationUnsuccessful(String invalidParticipant) {
+        assertFalse(uniqueProjectpage.isParticipantInvited(invalidParticipant));
+    }
+
+
+    @And("I close the test, deleting and creating the project again.")
+    public void close() {
         // Go back to projects page
         homepage.clickOnElement(homepage.getProjectsButton());
         // Delete and create the ShareThisProject project
@@ -36,29 +81,6 @@ public class ShareProjectTest extends Basetest {
         projectspage.createNewProject("ShareThisProject");
         signIn.logoutForTest(homepage);
         Homepage.shutDown();
-    }
-
-    /**
-     * Invite participant is working
-     * Participant: zsana
-     */
-
-    @Test
-    void inviteParticipant() {
-        String participant = "zsana";
-        uniqueProjectpage.inviteParticipant(participant);
-        Assertions.assertTrue(uniqueProjectpage.isParticipantInvited());
-    }
-
-    /**
-     * Invitation is not possible when user doesn't exists.
-     */
-
-    @Test
-    void invitationWithNonExistingUser() {
-        String invalidParticipant = "invalidUser";
-        uniqueProjectpage.inviteParticipant(invalidParticipant);
-        Assertions.assertFalse(uniqueProjectpage.isParticipantInvited());
     }
 
 }

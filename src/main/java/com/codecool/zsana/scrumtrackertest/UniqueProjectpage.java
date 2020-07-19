@@ -2,6 +2,7 @@ package com.codecool.zsana.scrumtrackertest;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -73,10 +74,6 @@ public class UniqueProjectpage extends Basepage {
     // Pop-up window: add new participant
     @FindBy(xpath = "//span[@aria-label='user-add']")
     private WebElement getAddNewParticipantGreenManButton;
-
-    // Pop-up window: add new participant - look for this name after added new participant:
-    @FindBy(xpath = "//div[@class='ant-modal-content']//div[@class='participant_users']//h3[contains(text(),'zsana')]")
-    private WebElement getNewParticipantName;
 
     // Pop-up window: add new participant
     @FindBy(xpath = "//div[@class='ant-modal-content']/button[@aria-label='Close']")
@@ -322,11 +319,14 @@ public class UniqueProjectpage extends Basepage {
         clickOnElement(closeAddNewParticipantWindow);
     }
 
-    // At the moment participant only can be: zsana
-    boolean isParticipantInvited() {
+    boolean isParticipantInvited(String participant) {
+        WebElement getNewParticipantName;
         clickOnElement(addNewParticipantButton);
         boolean display = true;
+        // Pop-up window: add new participant - look for this name after added new participant:
         try {
+            getNewParticipantName = getDriver().findElement(By.xpath("//div[@class='ant-modal-content']//div[@class='participant_users']" +
+                    "//h3[contains(text(),'" + participant + "')]"));
             getNewParticipantName.isDisplayed();
         } catch (Exception e) {
             display = false;
@@ -409,10 +409,6 @@ public class UniqueProjectpage extends Basepage {
 
     public WebElement getGetAddNewParticipantGreenManButton() {
         return getAddNewParticipantGreenManButton;
-    }
-
-    public WebElement getGetNewParticipantName() {
-        return getNewParticipantName;
     }
 
     public WebElement getCloseAddNewParticipantWindow() {
