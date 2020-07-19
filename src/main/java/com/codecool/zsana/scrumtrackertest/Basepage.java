@@ -114,22 +114,22 @@ public class Basepage {
     }
 
     public void dragElement(WebElement elementToDrag, WebElement to) {
-        //Actions actions = new Actions(driver);
+        Actions actions = new Actions(driver);
         //actions.dragAndDrop(elementToDrag, to).build().perform();
         //actions.clickAndHold(elementToDrag).pause(2000).moveToElement(to).release().build().perform();
-        /*
+
         actions.keyDown(Keys.CONTROL)
                 .click(elementToDrag)
                 .dragAndDrop(elementToDrag, to)
                 .keyUp(Keys.CONTROL);
 
         Action selected = actions.build();
-        selected.perform(); */
-
+        selected.perform();
+        /*
         Actions action = new Actions(driver);
         Action dragDrop = action.dragAndDrop(elementToDrag, to).build();
         dragDrop.perform();
-
+        */
     }
 
     public String getHomepage() {

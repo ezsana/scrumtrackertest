@@ -115,52 +115,70 @@ Feature: Unique projects page
     | zsana6@zsana6.com |
 
 # 9)
-  Scenario: unsuccessful sending project details via e-mail - invalid e-mail address
+  Scenario Outline: unsuccessful sending project details via e-mail - invalid e-mail address
 
     Given that I'm on my unique project page
-    When I click on send email button and write invalid email address into the input field
+    When I click on send email button and write "<invalidEmail>" into the input field
     Then I get a message that the address is invalid
     And close unique project test.
 
+    Examples:
+
+    | invalidEmail |
+    | invalidEmail |
+
 # 10)
-  Scenario: Successful setting limit in the "In Progress" status
+  Scenario Outline: Successful setting limit in the "In Progress" status
 
     Given that I'm on my unique project page
-    When I click on Limit In Progress status button and I write the limit
+    When I click on Limit In Progress status button and I write the limit: "<limit>"
     Then message shows that the change was successful
     And close unique project test.
 
-# 11)
-  Scenario: Successful dragging a task from status to status
+    Examples:
 
-    Given that I have a task
-    When I drag the task from one status to an other
-    Then the aforementioned task would be in the new container
+    | limit |
+    | 2     |
+
+# 11)
+  Scenario Outline: Successful dragging a task from status to status
+
+    Given that I'm on my unique project page
+    When I drag the task "TransferThisTask" from one status to an other
+    Then the aforementioned task would be in the new container: "<status>"
     And close unique project test.
+
+    Examples:
+
+    |    status   |
+    | In Progress |
 
 # 12)
   Scenario: Successful editing a task
 
     Given that I'm on my unique project page
-    And that I have a task
-    When I click on the Edit task button and make changes to the task and click on Save button
+    When I click on the Edit task button and make changes to the task: "EditThisTask" and click on Save button
     Then those changes are saved
     And close unique project test.
 
 # 13)
-  Scenario: Unsuccessful to edit task task with less than three character
+  Scenario Outline: Unsuccessful to edit task task with less than three character
 
     Given that I'm on my unique project page
-    And that I have a task
-    When I click on the edit button and edit the title using less than three character
-    Then I get a message to write more the three character for the title
+    When I click on the edit button and edit the title of task: "EditThisTask" using less than three character: "<wrongTitle>"
+    Then I get a message to write more the three character for the title "<wrongTitle>"
     And close unique project test.
+
+    Examples:
+
+    | wrongTitle |
+    | uu         |
 
 # 14)
   Scenario: Without clicking on the save button the changed are not saved
 
     Given that I'm on my unique project page
-    And that I clicked on the edit task button
+    And that I clicked on the edit task button of "EditThisTask"
     When I fill the inputs but don't click on Save button and close the edit window
     Then the changes are not saved
     And close unique project test.
