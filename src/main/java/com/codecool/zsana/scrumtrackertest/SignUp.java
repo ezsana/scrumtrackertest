@@ -99,10 +99,6 @@ public class SignUp extends Basepage {
         return successfulRegistrationWindowMessage;
     }
 
-    public WebElement getErrorMessage() {
-        return errorMessage;
-    }
-
     public WebElement getAtLeastFiveCharMessage() {
         return atLeastFiveCharMessage;
     }

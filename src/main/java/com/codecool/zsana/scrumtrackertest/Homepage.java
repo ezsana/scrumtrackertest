@@ -47,11 +47,6 @@ public class Homepage extends Basepage {
         return welcomeHeading;
     }
 
-    public WebElement getNavbar() {
-        getWait().until(ExpectedConditions.visibilityOf(navbar));
-        return navbar;
-    }
-
     public WebElement getHomeButton() {
         getWait().until(ExpectedConditions.visibilityOf(homeButton));
         return homeButton;

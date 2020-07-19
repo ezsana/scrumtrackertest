@@ -122,4 +122,5 @@ public class SignUpTest extends Basetest {
         signUp.clickOnElement(signUp.getCloseWindowButton());
         Basepage.shutDown();
     }
+
 }

@@ -152,11 +152,11 @@ public class UniqueProjectpage extends Basepage {
 
     // Button to delete edited task
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'Edited title')]/preceding-sibling::div[1]//span[@aria-label='delete']")
-    private WebElement editedTaskDeletebutton;
+    private WebElement editedTaskDeleteButton;
 
     // Button to delete EditThisTask
     @FindBy(xpath = "//*[@id='root']//div[contains(text(),'EditThisTask')]/preceding-sibling::div[1]//span[@aria-label='delete']")
-    private WebElement editThisTaskDeletebutton;
+    private WebElement editThisTaskDeleteButton;
 
     @FindBy(xpath = "//div[@class='ant-modal-content']//input[@class='text_input title']")
     private WebElement editThisTaskTitleInput;
@@ -367,14 +367,6 @@ public class UniqueProjectpage extends Basepage {
         return doneContainer;
     }
 
-    public WebElement getTransferThisTaskTitle() {
-        return transferThisTaskTitle;
-    }
-
-    public WebElement getEditThisTaskTitle() {
-        return editThisTaskTitle;
-    }
-
     public WebElement getAddNewTaskButtonInDoneStatus() {
         return addNewTaskButtonInDoneStatus;
     }
@@ -387,48 +379,8 @@ public class UniqueProjectpage extends Basepage {
         return addNewTaskSubmitButtonInDoneStatus;
     }
 
-    public WebElement getAddNewStatusIcon() {
-        return addNewStatusIcon;
-    }
-
-    public WebElement getAddNewStatusInputField() {
-        return addNewStatusInputField;
-    }
-
-    public WebElement getAddNewStatusSubmitButton() {
-        return addNewStatusSubmitButton;
-    }
-
-    public WebElement getAddNewParticipantButton() {
-        return addNewParticipantButton;
-    }
-
-    public WebElement getGetAddNewParticipantInputField() {
-        return getAddNewParticipantInputField;
-    }
-
-    public WebElement getGetAddNewParticipantGreenManButton() {
-        return getAddNewParticipantGreenManButton;
-    }
-
-    public WebElement getCloseAddNewParticipantWindow() {
-        return closeAddNewParticipantWindow;
-    }
-
-    public WebElement getSendEmailButton() {
-        return sendEmailButton;
-    }
-
     public WebElement getCloseSendEmailWindow() {
         return closeSendEmailWindow;
-    }
-
-    public WebElement getSendEmailInputField() {
-        return sendEmailInputField;
-    }
-
-    public WebElement getSendEmailPopUpWindowButton() {
-        return sendEmailPopUpWindowButton;
     }
 
     public WebElement getMessageOfSuccessfulEmailSending() {
@@ -447,56 +399,12 @@ public class UniqueProjectpage extends Basepage {
         return errorWindowCloseButton;
     }
 
-    public WebElement getLimitInProgressTaskCount() {
-        return limitInProgressTaskCount;
-    }
-
     public WebElement getTransferThisTask() {
         return transferThisTask;
     }
 
     public WebElement getEditThisTaskEditButton() {
         return editThisTaskEditButton;
-    }
-
-    public WebElement getEditThisTaskTitleInput() {
-        return editThisTaskTitleInput;
-    }
-
-    public WebElement getEditThisTaskTitleSaveButton() {
-        return editThisTaskTitleSaveButton;
-    }
-
-    public WebElement getEditThisTaskDescriptionInput() {
-        return editThisTaskDescriptionInput;
-    }
-
-    public WebElement getEditThisTaskDescriptionSaveButton() {
-        return editThisTaskDescriptionSaveButton;
-    }
-
-    public WebElement getEditThisTaskPriorityInput() {
-        return editThisTaskPriorityInput;
-    }
-
-    public WebElement getEditThisTaskPrioritySaveButton() {
-        return editThisTaskPrioritySaveButton;
-    }
-
-    public WebElement getEditThisTaskOwnerInput() {
-        return editThisTaskOwnerInput;
-    }
-
-    public WebElement getEditThisTaskOwnerSaveButton() {
-        return editThisTaskOwnerSaveButton;
-    }
-
-    public WebElement getEditThisTaskDeadlineInput() {
-        return editThisTaskDeadlineInput;
-    }
-
-    public WebElement getEditThisTaskDeadlineSaveButton() {
-        return editThisTaskDeadlineSaveButton;
     }
 
     public WebElement getEditThisTaskCloseWindowButton() {
@@ -511,32 +419,12 @@ public class UniqueProjectpage extends Basepage {
         return valueProgressChart;
     }
 
-    public WebElement getNeedOwnerTask() {
-        return needOwnerTask;
-    }
-
-    public WebElement getZsana6Task() {
-        return zsana6Task;
-    }
-
     public WebElement getInvalidEmailMessage() {
         return invalidEmailMessage;
     }
 
     public WebElement getInvalidEmailErrorWindowCloseButton() {
         return invalidEmailErrorWindowCloseButton;
-    }
-
-    public WebElement getLimitInProgressWindowInput() {
-        return limitInProgressWindowInput;
-    }
-
-    public WebElement getLimitInProgressWindowSendButton() {
-        return limitInProgressWindowSendButton;
-    }
-
-    public WebElement getLimitInProgressWindowCloseButton() {
-        return limitInProgressWindowCloseButton;
     }
 
     public WebElement getLimitInProgressSuccessfulMessage() {
@@ -571,15 +459,15 @@ public class UniqueProjectpage extends Basepage {
         return editedTaskEditButton;
     }
 
-    public WebElement getEditedTaskDeletebutton() {
-        return editedTaskDeletebutton;
+    public WebElement getEditedTaskDeleteButton() {
+        return editedTaskDeleteButton;
     }
 
     public WebElement getLessThanThreeCharTaskEditButton() {
         return lessThanThreeCharTaskEditButton;
     }
 
-    public WebElement getEditThisTaskDeletebutton() {
-        return editThisTaskDeletebutton;
+    public WebElement getEditThisTaskDeleteButton() {
+        return editThisTaskDeleteButton;
     }
 }

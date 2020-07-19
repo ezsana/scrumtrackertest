@@ -7,9 +7,9 @@ import cucumber.api.java.en.When;
 
 import static org.junit.Assert.*;
 
-/**
- * To make this test reusable, the ShareThisProject is deleted and created again.
- */
+    /**
+     * To make this test reusable, the ShareThisProject is deleted and created again.
+     */
 
 public class ShareProjectTest extends Basetest {
 

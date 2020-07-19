@@ -52,10 +52,6 @@ public class Basepage {
         wait.until(ExpectedConditions.visibilityOf(element)).click();
     }
 
-    public void navigateToPage(String url) {
-        driver.navigate().to(url);
-    }
-
     public void refreshPage() {
         driver.navigate().refresh();
     }

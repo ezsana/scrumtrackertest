@@ -113,14 +113,6 @@ public class Projectspage extends Basepage {
         return project.isDisplayed();
     }
 
-    void deleteArchivedProject() {
-
-    }
-
-    public WebElement getYourProjectsHeading() {
-        return yourProjectsHeading;
-    }
-
     public WebElement getBaseProjectForTestTitle() {
         return baseProjectForTestTitle;
     }
@@ -131,10 +123,6 @@ public class Projectspage extends Basepage {
 
     public WebElement getArchiveThisProjectTitle() {
         return archiveThisProjectTitle;
-    }
-
-    public WebElement getArchiveThisProjectSign() {
-        return archiveThisProjectSign;
     }
 
     public WebElement getShowAndHideArchiveProjects() {
@@ -149,22 +137,8 @@ public class Projectspage extends Basepage {
         return closeErrorWindow;
     }
 
-    public WebElement getCreateProjectInput() {
-        getWait().until(ExpectedConditions.visibilityOf(createProjectInput));
-        return createProjectInput;
-    }
-
-    public WebElement getCreateProjectSubmitButton() {
-        getWait().until(ExpectedConditions.visibilityOf(createProjectSubmitButton));
-        return createProjectSubmitButton;
-    }
-
     public WebElement getSharedProjectsContainer() {
         return sharedProjectsContainer;
-    }
-
-    public WebElement getDeletesharedProjectButton() {
-        return deleteSharedProjectButton;
     }
 
     public WebElement getDeleteSharedProjectButton() {

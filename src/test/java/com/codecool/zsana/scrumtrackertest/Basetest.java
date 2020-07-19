@@ -13,24 +13,12 @@ public class Basetest {
     private String password2 = "zsana";
     private String email2 = "zsana@zsana.com";
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
     public String getUsername2() {
         return username2;
     }
 
     public String getPassword2() {
         return password2;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public String getEmail2() {

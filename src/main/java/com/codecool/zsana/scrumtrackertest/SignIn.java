@@ -6,7 +6,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class SignIn extends Basepage {
 
-
     @FindBy(xpath = "//*[@id='root']//div[@class='authpage_select_btn_container']/div[contains(text(),'Sign in')]")
     private WebElement signInButton;
 

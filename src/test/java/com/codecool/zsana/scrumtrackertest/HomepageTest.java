@@ -17,6 +17,11 @@ public class HomepageTest extends Basetest {
     private Homepage homepage;
     private SignIn signIn;
 
+    /**
+     * Scenario: All web elements seen on homepage: Homepage / Projects / Logout buttons;
+     * welcome message; link to projects
+     */
+
     @Given("that I'm logged in")
     public void setupTest(){
         Basepage.setUp();

@@ -284,7 +284,7 @@ public class UniqueProjectpageTest extends Basetest {
         uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskCloseWindowButton());
 
         // Change back the original values for later tests - delete EditThisTask and create it again
-        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditedTaskDeletebutton());
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditedTaskDeleteButton());
         uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
 
         return Arrays.asList(DynamicTest.dynamicTest("Title check", () -> assertEquals(title, editedTitle)),
@@ -371,7 +371,7 @@ public class UniqueProjectpageTest extends Basetest {
         // Check if value is three total
         boolean valueIsThree = uniqueProjectpage.getValueProgressChart().getText().contains("3 total");
         // Delete EditThisTask and create it again
-        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskDeletebutton());
+        uniqueProjectpage.clickOnElement(uniqueProjectpage.getEditThisTaskDeleteButton());
         uniqueProjectpage.addNewTask("EditThisTask", uniqueProjectpage.getAddNewTaskButtonInToDoStatus(), uniqueProjectpage.getAddNewTaskInputInToDoStatus(), uniqueProjectpage.getAddNewTaskSubmitButtonInToDoStatus());
         // Assert value
        assertTrue(valueIsThree);
@@ -383,4 +383,5 @@ public class UniqueProjectpageTest extends Basetest {
         signIn.logoutForTest(homepage);
         Homepage.shutDown();
     }
+
 }
